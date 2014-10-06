@@ -1,0 +1,16 @@
+---
+- name: copy over kickstart file
+  template: src="kickstart.cfg" dest="{{ kickstart_tempdir }}/{{ inventory_hostname }}.ks"
+  delegate_to: "{{ hyper }}"
+
+- name: copy over virt-install script
+  template: src="virt-install.sh" dest="{{ kickstart_tempdir }}/{{ inventory_hostname }}-install.sh"
+  delegate_to: "{{ hyper }}"
+
+- name: run virt-install script
+  command: "bash {{ kickstart_tempdir }}/{{ inventory_hostname }}-install.sh"
+  sudo: yes
+  environment: proxy_env
+  args:
+    creates: "/etc/libvirt/qemu/{{ inventory_hostname }}.xml"
+  delegate_to: "{{ hyper }}"
