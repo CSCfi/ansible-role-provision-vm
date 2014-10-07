@@ -16,7 +16,7 @@ virt-install \
   --connect=qemu:///system \
   --location={{ location }} \
   --graphics=vnc \
-  --noautoconsole \
+  --wait=10 \
   --initrd-inject={{ kickstart_tempdir }}/{{ inventory_hostname }}.ks \
   --extra-args="ks=file:/{{ inventory_hostname }}.ks"
 fi
