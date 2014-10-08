@@ -5,6 +5,7 @@ if [ ! -f /etc/libvirt/qemu/{{ inventory_hostname }}.xml ]; then
 virt-install \
   --name={{ inventory_hostname }} \
   --os-variant=rhel6 \
+  --cpu host \
   --vcpus={{ vcpus }} \
   --ram={{ ram }} \
 {% for disk in disks %}
