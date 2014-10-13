@@ -10,7 +10,7 @@
 - name: run virt-install script
   command: "bash {{ kickstart_tempdir }}/{{ inventory_hostname }}-install.sh"
   sudo: yes
-  environment: proxy_env
+  environment: env_virt_install
   args:
     creates: "/etc/libvirt/qemu/{{ inventory_hostname }}.xml"
   delegate_to: "{{ hyper }}"
