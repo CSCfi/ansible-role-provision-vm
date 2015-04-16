@@ -5,7 +5,11 @@ if [ ! -f /etc/libvirt/qemu/{{ inventory_hostname }}.xml ]; then
 virt-install \
   --name={{ inventory_hostname }} \
   --os-variant=rhel6 \
-  --cpu host \
+{% if virt_install_cpu_model %}
+  --cpu={{ virt_install_cpu_model }} \
+{% else %}
+  --cpu=host \
+{% endif %}
   --vcpus={{ vcpus }} \
   --ram={{ ram }} \
 {% for disk in disks %}
@@ -18,7 +22,7 @@ virt-install \
   --location={{ location }} \
   --graphics=vnc,keymap="fi" \
   --noautoconsole \
-  --wait=10 \
+  --wait=15 \
   --initrd-inject={{ kickstart_tempdir }}/{{ inventory_hostname }}.ks \
   --extra-args="ks=file:/{{ inventory_hostname }}.ks nomodeset"
 fi
