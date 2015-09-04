@@ -1,4 +1,12 @@
 ---
+- name: gather hypervisor facts
+  setup:
+  delegate_to: "{{ hyper }}"
+
+- name: group hypervisors by distro
+  group_by: key=os_{{ ansible_distribution }}_{{ ansible_distribution_major_version }}
+  delegate_to: "{{ hyper }}"
+
 - name: copy over kickstart file
   template: src="kickstart.cfg" dest="{{ kickstart_tempdir }}/{{ inventory_hostname }}.ks"
   sudo: yes
