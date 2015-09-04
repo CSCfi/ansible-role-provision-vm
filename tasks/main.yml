@@ -30,9 +30,11 @@
   delegate_to: "{{ hyper }}"
 
 - name: Remove kickstart file
+  sudo: yes
   file: path="{{ kickstart_tempdir }}/{{ inventory_hostname }}.ks" state=absent
   delegate_to: "{{ hyper }}"
 
 - name: Remove install script
+  sudo: yes
   file: path="{{ kickstart_tempdir }}/{{ inventory_hostname }}-install.sh" state=absent
   delegate_to: "{{ hyper }}"
