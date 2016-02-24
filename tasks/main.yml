@@ -39,7 +39,7 @@
 
 - name: wait for VM to become available before continuing
   wait_for: port=22 host="{{ inventory_hostname }}" timeout=300
-  delegate_to: "{{ hyper }}"
+  delegate_to: "{{ bastion_host | default(hyper) }}"
 
 - name: Remove kickstart file
   sudo: yes
