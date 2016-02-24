@@ -7,6 +7,18 @@
   group_by: key=os_{{ ansible_distribution }}_{{ ansible_distribution_major_version }}
   delegate_to: "{{ hyper }}"
 
+- name: set variables specific to CentOS 6
+  set_fact:
+    virt_install_cpu_model: "host"
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == "6"
+  delegate_to: "{{ hyper }}"
+
+- name: set variables specific to CentOS 7
+  set_fact:
+    virt_install_cpu_model: "host-model"
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == "7"
+  delegate_to: "{{ hyper }}"
+
 - name: copy over kickstart file
   template: src="kickstart.cfg" dest="{{ kickstart_tempdir }}/{{ inventory_hostname }}.ks"
   sudo: yes
