@@ -38,7 +38,7 @@
   delegate_to: "{{ hyper }}"
 
 - name: wait for VM to become available before continuing
-  wait_for: port=22 host="{{ inventory_hostname }}" timeout=300
+  wait_for: port=22 host="{{ provisioning_wait_for_addr | default(inventory_hostname) }}" timeout=300
   delegate_to: "{{ bastion_host | default(hyper) }}"
 
 - name: Remove kickstart file
