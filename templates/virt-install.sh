@@ -19,7 +19,7 @@ virt-install \
   --network bridge={{ bridge }},model=virtio \
 {% endfor %}
   --connect=qemu:///system \
-  --location={{ location }} \
+  --location={{ install_url }} \
   --graphics=vnc,keymap="fi" \
   --noautoconsole \
   --wait=20 \
