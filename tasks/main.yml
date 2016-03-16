@@ -29,6 +29,11 @@
   sudo: yes
   delegate_to: "{{ hyper }}"
 
+- name: if attaching a pci passthrough device, detach it from the hypervisor
+  command: "virsh nodedev-detach {{ passthrough_host_device }}"
+  when: passthrough_host_device is defined
+  delegate_to: "{{ hyper }}"
+
 - name: run virt-install script
   command: "bash {{ kickstart_tempdir }}/{{ inventory_hostname }}-install.sh"
   sudo: yes
