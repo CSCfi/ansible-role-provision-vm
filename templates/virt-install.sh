@@ -18,6 +18,9 @@ virt-install \
 {% for bridge in bridges %}
   --network bridge={{ bridge }},model=virtio \
 {% endfor %}
+{% if passthrough_host_device %}
+  --host-device {{ passthrough_host_device }} \
+{% endif %}
   --connect=qemu:///system \
   --location={{ install_url }} \
   --graphics=vnc,keymap="fi" \
