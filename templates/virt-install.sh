@@ -25,5 +25,5 @@ virt-install \
   --autostart \
   --wait=20 \
   --initrd-inject={{ kickstart_tempdir }}/{{ inventory_hostname }}.ks \
-  --extra-args="ks=file:/{{ inventory_hostname }}.ks nomodeset"
+  --extra-args="ks=file:/{{ inventory_hostname }}.ks nomodeset console=ttyS0"
 fi
