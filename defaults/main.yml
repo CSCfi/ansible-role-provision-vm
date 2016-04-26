@@ -1,0 +1,53 @@
+---
+
+#################
+## kickstart.cfg:
+#################
+#hyper: ""
+#env_virt_install: ""
+#provisioning_wait_for_addr: ""
+#bastion_host: ""
+#kickstart_tempdir: ""
+# yum_proxy: "http://10.1.1.1:3128"
+# install_url: ""
+# internal_ip: ""
+# fqdn: ""
+
+#repos:
+#  - { name: "EPEL", url: "http://www.nic.funet.fi/pub/mirrors/fedora.redhat.com/pub/epel/7/x86_64", pkgname: "epel-release" }
+#  - { name: "EL Repo", url: "http://elrepo.org/linux/elrepo/el7/x86_64", pkgname: "elrepo-release" }
+
+#networks:
+#  - "network --onboot={{enable_ext_nic}} --device={{external_interface}} --bootproto=static --ip={{ext_ip_addr}} --netmask={{ext_net_mask}} --nameserver={{nameserver2}} --hostname={{ fqdn }} --gateway={{ext_gateway}} --noipv6"
+#
+
+# firewall_rules:
+
+#kickstart_partitions: |
+#  bootloader --location=mbr --append="selinux=0" --boot-drive=sda
+#  zerombr
+#  clearpart --all --initlabel --drives=sda
+#  part biosboot --fstype="biosboot" --size=1
+#  part / --fstype="xfs" --ondisk=sda --size=50000
+#  part swap --size=500
+#  part /local --fstype="xfs" --ondisk=sda --size=1 --grow
+#
+# puppetmaster_ip:
+# puppetmaster_fqdn:
+# root_password:
+
+#root_keys:              
+#  - ssh-rsa KEY2
+#  - ssh-rsa KEY1
+
+# routes:
+
+
+##################
+# virt-install.sh:
+# ################
+# virt_install_cpu_model:
+#vcpus: "4"
+#ram: "4096"
+#disks:
+#bridges:
