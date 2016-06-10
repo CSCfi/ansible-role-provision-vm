@@ -1,2 +1,6 @@
 ---
+# What packages to exclude in yum.conf at install time
 yum_exclude: ""
+
+# Time to wait for install to finish (in minutes)
+install_timeout: "30"

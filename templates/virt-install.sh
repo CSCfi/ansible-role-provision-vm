@@ -23,7 +23,7 @@ virt-install \
   --graphics=vnc,keymap="fi" \
   --noautoconsole \
   --autostart \
-  --wait=20 \
+  --wait={{ install_timeout }} \
   --initrd-inject={{ kickstart_tempdir }}/{{ inventory_hostname }}.ks \
   --extra-args="ks=file:/{{ inventory_hostname }}.ks nomodeset console=ttyS0"
 fi
