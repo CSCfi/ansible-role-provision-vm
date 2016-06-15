@@ -4,3 +4,6 @@ yum_exclude: ""
 
 # Time to wait for install to finish (in minutes)
 install_timeout: "30"
+
+# Any additional packages to install during provisioning (as a list)
+extra_packages: []
