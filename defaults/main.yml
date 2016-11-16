@@ -7,3 +7,9 @@ install_timeout: "30"
 
 # Any additional packages to install during provisioning (as a list)
 extra_packages: []
+
+# Temp directory for storing kickstart related tempoary files
+kickstart_tempdir: "/tmp"
+
+# Empty environment for running virt-install
+env_virt_install: {  }
