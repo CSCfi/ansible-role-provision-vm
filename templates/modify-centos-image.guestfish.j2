@@ -1,0 +1,4 @@
+#!/usr/bin/guestfish --rw -a {{ image_path}}/{{ fqdn }}.qcow2
+run
+mount /dev/sda1 /
+rm /etc/sysconfig/network-scripts/ifcfg-eth0 

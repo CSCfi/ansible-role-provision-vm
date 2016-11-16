@@ -1,15 +1,58 @@
 ---
-# What packages to exclude in yum.conf at install time
-yum_exclude: ""
+#################################################
+# Common settings ###############################
+#################################################
 
 # Time to wait for install to finish (in minutes)
 install_timeout: "30"
 
+# Temp directory for storing provisioning related files
+provision_tempdir: "/tmp"
+
+libvirt_store: "/var/lib/libvirt"
+
+# Default to a single vcpu
+vcpus: 1
+
+# Default to 1GB of memory
+ram: 1024
+
+# Default environment name (suggested use case: dev/test/prod)
+environment: default-environment
+
+#################################################
+# Kickstart based deployment settings ###########
+#################################################
+
+# What packages to exclude in yum.conf at install time
+yum_exclude: ""
+
 # Any additional packages to install during provisioning (as a list)
 extra_packages: []
 
-# Temp directory for storing kickstart related tempoary files
-kickstart_tempdir: "/tmp"
-
 # Empty environment for running virt-install
-env_virt_install: {  }
+env_virt_install: {}
+
+# Temp directory for storing kickstart related tempoary files
+kickstart_tempdir: "{{ provision_tempdir }}"
+
+#################################################
+# Image based deployment settings ###############
+#################################################
+
+# Default download location of CentOS image
+image_url_prefix: http://cloud.centos.org/centos/7/images/
+image_name: CentOS-7-x86_64-GenericCloud.qcow2
+
+# Where to download the images
+image_path: "{{ libvirt_store }}/images"
+timezone: Europe/Helsinki
+
+#
+# If you want to add all your users, use an `adminusers` dictionary as required
+# for ansible-role-users:
+#   https://github.com/CSC-IT-Center-for-Science/ansible-role-users
+#
+# You can also add a custom user to your guests for bootstrapping
+#bootstrap_user: bootstrap
+#bootstrap_ssh_key: ""
