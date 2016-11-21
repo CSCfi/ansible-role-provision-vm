@@ -70,20 +70,20 @@
     - guest_type == 'image'
     - guest_exists | failed
 
-- name: Start deployment of VM
+- name: Deploy script to deploy VM
   template:
-    src: virt-install-command.j2
-    dest: "{{runtime_tempdir}}/virt-install-command.txt"
+    src: virt-install-script.sh.j2
+    dest: "{{runtime_tempdir}}/virt-install-script.sh.j2"
   become: yes
   delegate_to: "{{ hyper }}"
   when: guest_exists | failed
 
 - name: Start deployment of VM
-  command: "bash {{ lookup('template', 'virt-install-command.j2') | replace('\\\n', '') }}"
-  become: yes
-  environment: "{{ env_virt_install }}"
+  command: "bash {{runtime_tempdir}}/virt-install-script.sh.j2"
   args:
     creates: "/etc/libvirt/qemu/{{ inventory_hostname }}.xml"
+  become: yes
+  environment: "{{ env_virt_install | default(omit) }}"
   delegate_to: "{{ hyper }}"
   register: virt_install_job
   when: guest_exists | failed
@@ -113,5 +113,4 @@
   become: yes
   delegate_to: "{{ hyper }}"
   when: guest_exists | failed
-
 ...
