@@ -27,6 +27,16 @@ ram: 1024
 # Default environment name (suggested use case: dev/test/prod)
 environment: default-environment
 
+# The network bridges a VM should get interfaces on
+#bridges: br-example
+
+# Hypervisor that should run this VM
+#hyper:
+
+# Define this if a ssh jump host which is not the hypervisor is needed to reach the VM
+#bastion_host:
+
+
 #################################################
 # Kickstart based deployment settings ###########
 #################################################
@@ -39,11 +49,68 @@ disks:
 # What packages to exclude in yum.conf at install time
 yum_exclude: ""
 
+# The basic set of packages to install during provisioning
+base_packages:
+ - vim*
+ - man
+ - mlocate
+ - nc
+ - strace
+ - tcpdump
+ - man
+ - rsync
+ - openssh-clients
+ - lvm2
+ - parted
+ - mailx
+ - dstat
+
 # Any additional packages to install during provisioning (as a list)
 extra_packages: []
 
+# Any packages to explicitly exclude during provisioning (as a list)
+exclude_packages: []
+
+# Extra repos to enable during kickstarting
+#repos:
+# - { name: "EPEL", url: "http://www.nic.funet.fi/pub/mirrors/fedora.redhat.com/pub/epel/7/x86_64/", pkgname: "epel-release" }
+
 # Empty environment for running virt-install
 env_virt_install: {}
+
+# Kickstart network configuration for the VM
+# A list of kickstart style network definitions
+#networks:
+#  - "network --onboot=on --device=eth0 --bootproto=static --ip=VM_IP --netmask=VM_NETMASK --gateway=VM_GATEWAY --nameserver=NAMESERVER --hostname=VM_HOSTNAME"
+
+# Root password in kickstart format
+#root_password: "{{ lookup('password', 'credentials/'+ inventory_hostname  +'_rootpw length=15') }}"
+
+# If you want to define a specific CPU model
+#virt_install_cpu_model:
+
+# Kickstart URL for the installation
+#install_url: http://mirror.example.com/pub/Centos/7/os/x86_64/
+
+# A list of partitioning rules in kickstart format if you want a non-default partitioning scheme
+#kickstart_partitions:
+
+# Extra firewall rules to give kickstart. List of entries in kickstart format
+#firewall_rules:
+
+# A list of ssh keys to populate into /root/.ssh/authorized_keys
+#root_keys:
+
+# Yum proxy to use during kickstart
+#yum_proxy:
+
+# Optional log hosts
+#central_log_host:
+
+# Optionally prepopulate /etc/hosts with the IP for the puppetmaster
+#puppetmaster_ip:
+
+
 
 #################################################
 # Image based deployment settings ###############
