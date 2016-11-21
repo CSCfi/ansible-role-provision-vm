@@ -1,0 +1,8 @@
+---
+# Create a new guest using Kickstart
+
+- name: copy over kickstart file
+  template: src="kickstart.cfg" dest="{{ kickstart_tempdir }}/{{ inventory_hostname }}.ks"
+  become: yes
+  delegate_to: "{{ hyper }}"
+...

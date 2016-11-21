@@ -1,52 +1,116 @@
 ---
-- name: gather hypervisor facts
-  setup:
-  delegate_to: "{{ hyper }}"
+- name: Check hyper is defined
+  assert:
+    that: hyper is defined
+    msg: "hyper must be set to a hypervisor host where you want VMs to run"
 
-- name: group hypervisors by distro
-  group_by: key=os_{{ ansible_distribution }}_{{ ansible_distribution_major_version }}
+# Most of this code will run on the hypervisor as defined by the hyper varible
+# We use a block to reduce repeating the 'delegate_to' for every task
+- block:
+
+  - name: gather hypervisor facts
+    setup:
+
+  - name: group hypervisors by distro
+    group_by:
+      key: "os_{{ ansible_distribution }}_{{ ansible_distribution_major_version }}"
+
+  - name: Check if VM exists already
+    virt:
+      name: "{{ inventory_hostname }}"
+      command: get_xml
+      uri: qemu:///system
+    register: guest_exists
+    ignore_errors: true
+    become: yes
+
+  - name: Ensure libvirt image directory is present
+    file:
+      path: "{{ image_path }}"
+      state: directory
+      mode: "0711"
+      owner: root
+      group: root
+    become: yes
+    when: guest_exists | failed
+
+  - name: create a remote temp directory
+    command: mktemp -d "{{ provision_tempdir }}/provision_vm.XXXX"
+    register: temp_dir
+    when: guest_exists | failed
+
+  - name: Set playbook temp_dir as fact
+    set_fact:
+      runtime_tempdir: "{{ temp_dir.stdout }}"
+    when: guest_exists | failed
+
+  - name: Change ownership of temp directory
+    file:
+      path: "{{ runtime_tempdir }}"
+      state: directory
+      mode: 0700
+      owner: qemu
+      group: qemu
+    become: yes
+    when: guest_exists | failed
+
   delegate_to: "{{ hyper }}"
+  # End of block
 
-- name: set variables specific to CentOS 6
-  set_fact:
-    virt_install_cpu_model: "host"
-  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == "6"
+- name: Prepare to start the guest using Kickstart
+  include: kickstart-guest.yml
+  when:
+    - guest_type is not defined or guest_type != "image"
+    - guest_exists | failed
+
+- name: Prepare to start the guest using an OpenStack image
+  include: image-guest.yml
+  when:
+    - guest_type is defined
+    - guest_type == 'image'
+    - guest_exists | failed
+
+- name: Deploy script to deploy VM
+  template:
+    src: virt-install-script.sh.j2
+    dest: "{{runtime_tempdir}}/virt-install-script.sh.j2"
+  become: yes
   delegate_to: "{{ hyper }}"
+  when: guest_exists | failed
 
-- name: set variables specific to CentOS 7
-  set_fact:
-    virt_install_cpu_model: "host-model"
-  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == "7"
-  delegate_to: "{{ hyper }}"
-
-- name: copy over kickstart file
-  template: src="kickstart.cfg" dest="{{ kickstart_tempdir }}/{{ inventory_hostname }}.ks"
-  sudo: yes
-  delegate_to: "{{ hyper }}"
-
-- name: copy over virt-install script
-  template: src="virt-install.sh" dest="{{ kickstart_tempdir }}/{{ inventory_hostname }}-install.sh"
-  sudo: yes
-  delegate_to: "{{ hyper }}"
-
-- name: run virt-install script
-  command: "bash {{ kickstart_tempdir }}/{{ inventory_hostname }}-install.sh"
-  sudo: yes
-  environment: "{{ env_virt_install }}"
+- name: Start deployment of VM
+  command: "bash {{runtime_tempdir}}/virt-install-script.sh.j2"
   args:
     creates: "/etc/libvirt/qemu/{{ inventory_hostname }}.xml"
+  become: yes
+  environment: "{{ env_virt_install | default(omit) }}"
   delegate_to: "{{ hyper }}"
+  register: virt_install_job
+  when: guest_exists | failed
+
+  # Force ansible to know the IP address of this host so it can connect
+  # This fixes things if you don't have the IP address in DNS or /etc/hosts.
+- name: Set inventory_hostname to the new guest IP address
+  set_fact: inventory_hostname={{ internal_ip }}
 
 - name: wait for VM to become available before continuing
-  wait_for: port=22 host="{{ provisioning_wait_for_addr | default(inventory_hostname) }}" timeout=300
+  wait_for:
+    port: 22
+    host: "{{ provisioning_wait_for_addr | default(inventory_hostname) }}"
+    timeout: 300
   delegate_to: "{{ bastion_host | default(hyper) }}"
+  when: guest_exists | failed
 
-- name: Remove kickstart file
-  sudo: yes
-  file: path="{{ kickstart_tempdir }}/{{ inventory_hostname }}.ks" state=absent
-  delegate_to: "{{ hyper }}"
+# Now the VM should be booting and we can connect directly to the host for the first time
+- name: Get facts from new vm
+  setup:
+  retries: 10
 
-- name: Remove install script
-  sudo: yes
-  file: path="{{ kickstart_tempdir }}/{{ inventory_hostname }}-install.sh" state=absent
+- name: cleanup tempoary install files
+  file:
+    path: runtime_tempdir
+    state: absent
+  become: yes
   delegate_to: "{{ hyper }}"
+  when: guest_exists | failed
+...
