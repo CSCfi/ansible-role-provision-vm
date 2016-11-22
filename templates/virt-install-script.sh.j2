@@ -11,6 +11,7 @@ virt-install \
   --connect=qemu:///system \
   --autostart \
   --noautoconsole \
+  --events on_poweroff=preserve \
 {% if guest_type is not defined or guest_type != "image" %}
 {% if ansible_distribution == "CentOS" and ansible_distribution_major_version == "7" %}
   --cpu=host-model \
