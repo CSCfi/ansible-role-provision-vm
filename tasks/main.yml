@@ -101,10 +101,23 @@
   delegate_to: "{{ bastion_host | default(hyper) }}"
   when: guest_exists | failed
 
+- name: Clear known_hosts for new VM
+  known_hosts:
+    name: "{{ item }}"
+    state: absent
+  when: guest_exists | failed
+  delegate_to: "{{ bastion_host | default(hyper) }}"
+  with_items:
+    - "{{ internal_ip }}"
+    - "{{ inventory_hostname }}"
+
 # Now the VM should be booting and we can connect directly to the host for the first time
 - name: Get facts from new vm
   setup:
-  retries: 10
+  register: setup
+  until: setup | succeeded
+  retries: 3
+  delay: 10
 
 - name: cleanup tempoary install files
   file:

@@ -48,6 +48,11 @@ image_name: CentOS-7-x86_64-GenericCloud.qcow2
 image_path: "{{ libvirt_store }}/images"
 timezone: Europe/Helsinki
 
+# DNS servers
+dns_servers:
+  server1: 8.8.4.4
+  server2: 8.8.8.8
+
 #
 # If you want to add all your users, use an `adminusers` dictionary as required
 # for ansible-role-users:
