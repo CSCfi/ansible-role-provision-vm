@@ -85,13 +85,17 @@
       - "'centos' in image_name.lower()"
       - "'7' in image_name"
 
+  - name: Resize image to use whole disk
+    command: qemu-img resize {{ image_path}}/{{ fqdn }}.qcow2 {{ root_disk_size }}G
+    become: yes
+
   # This fact is picked up by the virt-install-command.j2 template and
   # configures the VMs root disk
   - name: Set the disk fact
     set_fact:
       disks:
         - path: "{{ image_path}}/{{ fqdn }}.qcow2"
-          size: 40
+          size: "{{ root_disk_size }}"
           format: qcow2
 
   # End of block

@@ -9,7 +9,11 @@ install_timeout: "30"
 # Temp directory for storing provisioning related files
 provision_tempdir: "/tmp"
 
+# Where to store libvirt images and VMs
 libvirt_store: "/var/lib/libvirt"
+
+# Root disk size (GB)
+root_disk_size: 30
 
 # Default to a single vcpu
 vcpus: 1
@@ -23,6 +27,11 @@ environment: default-environment
 #################################################
 # Kickstart based deployment settings ###########
 #################################################
+
+# Disks
+disks:
+  - path: "{{ libvirt_store }}/{{ fqdn }}.raw"
+    size: "{{ root_disk_size }}"
 
 # What packages to exclude in yum.conf at install time
 yum_exclude: ""
@@ -49,9 +58,9 @@ image_path: "{{ libvirt_store }}/images"
 timezone: Europe/Helsinki
 
 # DNS servers
-dns_servers:
-  server1: 8.8.4.4
-  server2: 8.8.8.8
+resolv_nameservers:
+  - 8.8.4.4
+  - 8.8.8.8
 
 #
 # If you want to add all your users, use an `adminusers` dictionary as required
