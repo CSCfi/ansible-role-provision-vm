@@ -26,6 +26,10 @@ guest_type: image          # Defaults to "kickstart"
 #  - path: "{{ libvirt_store }}/{{ fqdn }}.raw"
 #    size: 40
 
+# The default ethernet interface is eth0 but for example Ubuntu 16.04
+# cloud image uses ens3
+#eth_interface: ens3
+
 #environment: default-environment
 
 # If you want to add all your users, use an `adminusers` dictionary as required
