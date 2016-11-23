@@ -112,14 +112,17 @@
     - "{{ inventory_hostname }}"
 
 # Now the VM should be booting and we can connect directly to the host for the first time
-- name: Get facts from new vm
+- name: Get facts from new vm (image based deployments only)
   setup:
   register: setup
   until: setup | succeeded
   retries: 3
   delay: 10
+  when:
+    - guest_type is defined
+    - guest_type == 'image'
 
-- name: cleanup tempoary install files
+- name: cleanup temporary install files
   file:
     path: runtime_tempdir
     state: absent
