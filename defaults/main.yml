@@ -9,8 +9,8 @@ install_timeout: "30"
 # Temp directory for storing provisioning related files
 provision_tempdir: "/tmp"
 
-# Where to store libvirt images and VMs
-libvirt_store: "/var/lib/libvirt"
+# Where libvirt stores images and vms
+libvirt_root: "/var/lib/libvirt"
 
 # Root disk size (GB)
 root_disk_size: 30
@@ -30,7 +30,7 @@ environment: default-environment
 
 # Disks
 disks:
-  - path: "{{ libvirt_store }}/{{ fqdn }}.raw"
+  - path: "{{ libvirt_root }}/{{ fqdn }}.raw"
     size: "{{ root_disk_size }}"
 
 # What packages to exclude in yum.conf at install time
@@ -42,9 +42,6 @@ extra_packages: []
 # Empty environment for running virt-install
 env_virt_install: {}
 
-# Temp directory for storing kickstart related tempoary files
-kickstart_tempdir: "{{ provision_tempdir }}"
-
 #################################################
 # Image based deployment settings ###############
 #################################################
@@ -54,7 +51,7 @@ image_url_prefix: http://cloud.centos.org/centos/7/images/
 image_name: CentOS-7-x86_64-GenericCloud.qcow2
 
 # Where to download the images
-image_path: "{{ libvirt_store }}/images"
+image_path: "{{ libvirt_root }}/images"
 timezone: Europe/Helsinki
 
 # DNS servers

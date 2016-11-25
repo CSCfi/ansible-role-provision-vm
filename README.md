@@ -23,7 +23,7 @@ guest_type: image          # Defaults to "kickstart"
 
 # Extra disks
 #disks:
-#  - path: "{{ libvirt_store }}/{{ fqdn }}.raw"
+#  - path: "{{ libvirt_root }}/{{ fqdn }}.raw"
 #    size: 40
 
 # The default ethernet interface is eth0 but for example Ubuntu 16.04
