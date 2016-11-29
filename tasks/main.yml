@@ -90,7 +90,7 @@
 
   # Force ansible to know the IP address of this host so it can connect
   # This fixes things if you don't have the IP address in DNS or /etc/hosts.
-- name: Set inventory_hostname to the new guest IP address
+- name: Set ansible_host to the new guest IP address
   set_fact: ansible_host={{ internal_ip }}
 
 - name: wait for VM to become available before continuing
@@ -120,11 +120,6 @@
     - "{{ ansible_host }}"
     - "{{ inventory_hostname }}"
   ignore_errors: yes
-
-- name: Disable host key checks since next step will always prompt for a new host key
-  set_fact:
-    ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
-  when: guest_exists | failed
 
 - name: Wait for ssh key configuration by cloud-init
   pause: seconds=5

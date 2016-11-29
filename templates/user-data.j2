@@ -10,7 +10,7 @@ users:
 {% if bootstrap_user is defined %}
   - name: {{ bootstrap_user }}
     sudo: ALL=(ALL) NOPASSWD:ALL
-{% if bootstrap_user_key is defined %}
+{% if bootstrap_ssh_key is defined %}
     ssh-authorized-keys:
       - {{ bootstrap_ssh_key }}
 {% endif %}

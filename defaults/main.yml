@@ -12,6 +12,9 @@ provision_tempdir: "/tmp"
 # Where libvirt stores images and vms
 libvirt_root: "/var/lib/libvirt"
 
+# Where to put images
+image_path: "{{ libvirt_root }}/images"
+
 # Root disk size (GB)
 root_disk_size: 30
 
@@ -30,7 +33,7 @@ environment: default-environment
 
 # Disks
 disks:
-  - path: "{{ libvirt_root }}/{{ fqdn }}.raw"
+  - path: "{{ image_path }}/{{ fqdn }}.raw"
     size: "{{ root_disk_size }}"
 
 # What packages to exclude in yum.conf at install time
@@ -50,9 +53,10 @@ env_virt_install: {}
 image_url_prefix: http://cloud.centos.org/centos/7/images/
 image_name: CentOS-7-x86_64-GenericCloud.qcow2
 
-# Where to download the images
-image_path: "{{ libvirt_root }}/images"
 timezone: Europe/Helsinki
+
+# List of admin users to add to new VM
+adminusers: []
 
 # DNS servers
 resolv_nameservers:

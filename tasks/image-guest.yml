@@ -8,6 +8,7 @@
     yum:
       name: libguestfs-tools
       state: installed
+    become: yes
 
   # Fetch a ready made OpenStack image.
   # Read only, and owned by the qemu user.
@@ -80,6 +81,8 @@
 
   - name: Fix CentOS 7 image to disable DHCP on eth0
     command: "/usr/bin/guestfish --rw -a {{ image_path}}/{{ fqdn }}.qcow2 -f {{ runtime_tempdir }}/modify-centos-image.guestfish"
+    environment:
+      LIBGUESTFS_BACKEND: direct # Fix first run on clean host with no VMs
     become: yes
     when:
       - "'centos' in image_name.lower()"

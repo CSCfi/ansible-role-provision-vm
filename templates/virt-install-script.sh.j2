@@ -11,7 +11,6 @@ virt-install \
   --connect=qemu:///system \
   --autostart \
   --noautoconsole \
-  --events on_poweroff=preserve \
 {% if guest_type is not defined or guest_type != "image" %}
 {% if ansible_distribution == "CentOS" and ansible_distribution_major_version == "7" %}
   --cpu=host-model \
@@ -25,6 +24,7 @@ virt-install \
   --initrd-inject={{ runtime_tempdir }}/{{ inventory_hostname }}.ks \
   --extra-args="ks=file:/{{ inventory_hostname }}.ks nomodeset console=ttyS0"
 {% else %}
+  --events on_poweroff=preserve \
   --disk path={{ image_path}}/{{ fqdn }}.iso,device=cdrom,perms=ro \
   --os-type=linux
 {% endif %}
