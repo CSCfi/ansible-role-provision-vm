@@ -141,7 +141,7 @@
 
 - name: cleanup temporary install files
   file:
-    path: runtime_tempdir
+    path: "{{ runtime_tempdir }}"
     state: absent
   become: yes
   delegate_to: "{{ hyper }}"
