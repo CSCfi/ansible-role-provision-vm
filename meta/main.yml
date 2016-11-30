@@ -1,11 +1,11 @@
 ---
 galaxy_info:
-  author: Risto Laurikainen
-  description: Kickstart a new KVM virtual machine
+  author: Risto Laurikainen, Peter Jenkins
+  description: Creates a KVM virtual machine with cloud-init capable images or Kickstart
   company: CSC - IT Center for Science Ltd.
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value
-  # issue_tracker_url: 
+  # issue_tracker_url:
   # Some suggested licenses:
   # - BSD (default)
   # - MIT
@@ -14,10 +14,10 @@ galaxy_info:
   # - Apache
   # - CC-BY
   license: MIT
-  min_ansible_version: 1.2
+  min_ansible_version: 2.2
   #
   # Below are all platforms currently available. Just uncomment
-  # the ones that apply to your role. If you don't see your 
+  # the ones that apply to your role. If you don't see your
   # platform on this list, let us know and we'll get it added!
   #
   platforms:

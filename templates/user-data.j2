@@ -1,0 +1,23 @@
+#cloud-config
+#
+# For debugging you might need to create a local account.
+#password: 
+#chpasswd: { expire: False }
+#ssh_pwauth: True
+#
+timezone: {{ timezone }}
+users:
+{% if bootstrap_user is defined %}
+  - name: {{ bootstrap_user }}
+    sudo: ALL=(ALL) NOPASSWD:ALL
+{% if bootstrap_ssh_key is defined %}
+    ssh-authorized-keys:
+      - {{ bootstrap_ssh_key }}
+{% endif %}
+{% endif %}
+{% for adminuser in adminusers %}
+  - name: {{ adminuser.name }}
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    ssh-authorized-keys:
+      - {{ adminuser.pubkey.split(' ')[:2] | join(" ") }}
+{% endfor %}

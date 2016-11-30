@@ -1,0 +1,106 @@
+---
+
+# Most of this code will run on the hypervisor as defined by the hyper varible
+# We use a block to reduce repeating the 'delegate_to' for every task
+- block:
+
+  - name: Ensure guestfish is installed
+    yum:
+      name: libguestfs-tools
+      state: installed
+    become: yes
+
+  # Fetch a ready made OpenStack image.
+  # Read only, and owned by the qemu user.
+  - name: Download specified image
+    get_url:
+      url: "{{ image_url_prefix }}/{{ image_name }}"
+      dest: "{{ image_path}}/{{ image_name }}"
+      mode: 0400
+      owner: qemu
+      backup: yes
+    become: yes
+
+  - name: Generate cloud-init meta-data
+    template:
+      src: "{{ item }}.j2"
+      dest: "{{ runtime_tempdir }}/{{ item }}"
+      mode: 0400
+      owner: qemu
+      group: qemu
+    with_items:
+      - meta-data
+      - user-data
+    become: yes
+
+  - name: Generate ISO for cloud-init
+    command: genisoimage -output {{ runtime_tempdir }}/cloud-init.iso -volid \
+             cidata -joliet -rock {{ runtime_tempdir }}/user-data \
+             {{ runtime_tempdir }}/meta-data
+    become: yes
+
+  - name: Fix permissions of cloud-init iso
+    file:
+      name: "{{ runtime_tempdir }}/cloud-init.iso"
+      mode: 0400
+      owner: qemu
+      group: qemu
+    become: yes
+
+  - name: Copy the iso for this guest
+    copy:
+      remote_src: true
+      src: "{{ runtime_tempdir }}/cloud-init.iso"
+      dest: "{{ image_path}}/{{ fqdn }}.iso"
+      mode: 0400
+      owner: qemu
+      group: qemu
+    become: yes
+
+  - name: Copy the image for this guest
+    copy:
+      remote_src: true
+      src: "{{ image_path}}/{{ image_name }}"
+      dest: "{{ image_path}}/{{ fqdn }}.qcow2"
+      mode: 0600
+      owner: qemu
+      group: qemu
+    become: yes
+
+  - name: Copy guestfish script to fix CentOS 7 image to disable DHCP on eth0
+    template:
+      src: modify-centos-image.guestfish.j2
+      dest: "{{ runtime_tempdir }}/modify-centos-image.guestfish"
+      mode: 0600
+      owner: qemu
+      group: qemu
+    become: yes
+    when:
+      - "'centos' in image_name.lower()"
+      - "'7' in image_name"
+
+  - name: Fix CentOS 7 image to disable DHCP on eth0
+    command: "/usr/bin/guestfish --rw -a {{ image_path}}/{{ fqdn }}.qcow2 -f {{ runtime_tempdir }}/modify-centos-image.guestfish"
+    environment:
+      LIBGUESTFS_BACKEND: direct # Fix first run on clean host with no VMs
+    become: yes
+    when:
+      - "'centos' in image_name.lower()"
+      - "'7' in image_name"
+
+  - name: Resize image to use whole disk
+    command: qemu-img resize {{ image_path}}/{{ fqdn }}.qcow2 {{ root_disk_size }}G
+    become: yes
+
+  # This fact is picked up by the virt-install-command.j2 template and
+  # configures the VMs root disk
+  - name: Set the disk fact
+    set_fact:
+      disks:
+        - path: "{{ image_path}}/{{ fqdn }}.qcow2"
+          size: "{{ root_disk_size }}"
+          format: qcow2
+
+  # End of block
+  delegate_to: "{{ hyper }}"
+...
