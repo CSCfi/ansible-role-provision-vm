@@ -36,6 +36,8 @@ environment: default-environment
 # Define this if a ssh jump host which is not the hypervisor is needed to reach the VM
 #bastion_host:
 
+# When provisioning, set ansible_host value to the host's internal IP address
+set_ansible_host_to_internal_ip: Yes
 
 #################################################
 # Kickstart based deployment settings ###########
