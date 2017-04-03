@@ -118,25 +118,13 @@
   when: guest_exists | failed
   delegate_to: localhost
   with_items:
-    - "{{ ansible_host }}"
+    - "{{ ansible_host | default('') }}"
     - "{{ inventory_hostname }}"
   ignore_errors: yes
-
 - name: Wait for ssh key configuration by cloud-init
-  pause: seconds=5
+  pause: seconds=10
   when:
     - guest_exists | failed
-    - guest_type is defined
-    - guest_type == 'image'
-
-# Now the VM should be booting and we can connect directly to the host for the first time
-- name: Get facts from new vm (image based deployments only)
-  setup:
-  register: setup
-  until: setup | succeeded
-  retries: 3
-  delay: 10
-  when:
     - guest_type is defined
     - guest_type == 'image'
 
