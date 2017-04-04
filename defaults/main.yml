@@ -127,12 +127,19 @@ timezone: Europe/Helsinki
 # List of admin users to add to new VM
 adminusers: []
 
-# DNS servers
-resolv_nameservers:
-  - 8.8.4.4
-  - 8.8.8.8
+# For cloud init networks, configure them in the same order the bridges
+# were added to the VM. gateway and nameservers are optional parameters
+#cloud_init_networks:
+#  - interface: eth0
+#    address: ip_for_eth0
+#    netmask: 255.255.255.0
+#  - interface: eth1
+#    address: ip_for_eth1
+#    netmask: 255.255.255.0
+#    gateway: gateway_ip
+#    nameservers: [ ns1_ip, ns2_ip ]
 
-#
+
 # If you want to add all your users, use an `adminusers` dictionary as required
 # for ansible-role-users:
 #   https://github.com/CSC-IT-Center-for-Science/ansible-role-users
