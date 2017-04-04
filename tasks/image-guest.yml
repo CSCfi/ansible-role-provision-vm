@@ -67,7 +67,7 @@
       group: qemu
     become: yes
 
-  - name: Copy guestfish script to fix CentOS 7 image to disable DHCP on eth0
+  - name: Copy guestfish script to fix CentOS 7 image networking
     template:
       src: modify-centos-image.guestfish.j2
       dest: "{{ runtime_tempdir }}/modify-centos-image.guestfish"
@@ -79,7 +79,7 @@
       - "'centos' in image_name.lower()"
       - "'7' in image_name"
 
-  - name: Fix CentOS 7 image to disable DHCP on eth0
+  - name: Fix CentOS 7 image to networking
     command: "/usr/bin/guestfish --rw -a {{ image_path}}/{{ fqdn }}.qcow2 -f {{ runtime_tempdir }}/modify-centos-image.guestfish"
     environment:
       LIBGUESTFS_BACKEND: direct # Fix first run on clean host with no VMs

@@ -4,11 +4,15 @@ instance-id: {{ inventory_hostname }}
 local-hostname: {{ inventory_hostname }}
 # The following block looks very debian-like but it works also in CentOS.
 network-interfaces: |
-  auto {{ eth_interface | default('eth0') }}
-  iface {{ eth_interface | default('eth0') }} inet static
-  address {{ internal_ip }}
-  netmask {{ netmask | default('255.255.255.0') }}
-{% if default_gateway is defined %}
-  gateway {{ default_gateway }}
+{% for item in cloud_init_networks %}
+  auto {{ item.interface }}
+  iface {{ item.interface }} inet static
+  address {{ item.address }}
+  netmask {{ item.netmask }}
+{% if item.gateway is defined %}
+  gateway {{ item.gateway }}
 {% endif %}
-  dns-nameservers {% for server in resolv_nameservers %}{{ server }} {% endfor %}
+{% if item.nameservers is defined %}
+  dns-nameservers {% for server in item.nameservers %}{{ server }} {% endfor %}
+{% endif %}
+{% endfor %}

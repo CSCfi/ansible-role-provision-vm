@@ -26,9 +26,18 @@ guest_type: image          # Defaults to "kickstart"
 #  - path: "{{ libvirt_root }}/{{ fqdn }}.raw"
 #    size: 40
 
-# The default ethernet interface is eth0 but for example Ubuntu 16.04
-# cloud image uses ens3
-#eth_interface: ens3
+# Networking setup
+# cloud_init_networks:
+#  - interface: eth0
+#    address: "{{ internal_ip }}"
+#    netmask: 255.255.255.0
+#  - interface: eth1
+#    address: "{{ public_ip }}"
+#    netmask: 255.255.255.0
+#    gateway: 1.2.3.4
+#    nameservers: [ 8.8.8.8 ]
+ 
+
 
 #environment: default-environment
 
