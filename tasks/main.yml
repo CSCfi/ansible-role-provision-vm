@@ -4,6 +4,14 @@
     that: hyper is defined
     msg: "hyper must be set to a hypervisor host where you want VMs to run"
 
+- name: Check network configuration for image-based deployments
+  assert:
+    that: cloud_init_networks is defined
+    msg: "Please configure your networks using cloud_init_networks. See defaults/main.yml"
+  when:
+    - guest_type is defined
+    - guest_type == 'image'
+
 # Most of this code will run on the hypervisor as defined by the hyper varible
 # We use a block to reduce repeating the 'delegate_to' for every task
 - block:
