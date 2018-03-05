@@ -2,16 +2,17 @@
 
  - name: Test
    hosts: localhost
+   connection: local
    remote_user: root
    vars:
-       - hyper: "my_hypervisor1"
+       - hyper: "localhost"
        - internal_ip: "10.0.0.2"
        - cloud_init_networks:
            - interface: eth0
              address: "{{ internal_ip }}"
              netmask: 255.255.255.0
        - bridges: [ "br-example" ]
-       - fqdn: "hypervisor_hostname.fully.qualified.example"
+       - fqdn: "localhost"
 
    roles:
        - ansible-role-provision-vm
