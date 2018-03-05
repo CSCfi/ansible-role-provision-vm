@@ -4,6 +4,10 @@
    hosts: localhost
    connection: local
    remote_user: root
+   pre_tasks:
+       - package:
+           name: qemu-kvm-common
+           state: present
    vars:
        - hyper: "localhost"
        - internal_ip: "10.0.0.2"
