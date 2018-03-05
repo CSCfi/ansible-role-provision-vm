@@ -17,6 +17,7 @@
              netmask: 255.255.255.0
        - bridges: [ "br-example" ]
        - fqdn: "localhost"
+       - install_url: "http://www.nic.funet.fi/pub/Linux/INSTALL/Centos/7/os/x86_64/"
 
    roles:
        - ansible-role-provision-vm
