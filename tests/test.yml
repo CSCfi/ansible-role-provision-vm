@@ -1,6 +1,10 @@
 ---
 
- - name: Test
+# This playbook is pretty bad, it's so that testing can run the playbook and
+#  configure most things, without it actually provisioning any VMs.
+# Don't use it as an example for what to do :)
+
+ - name: Playbook for CI testing.
    hosts: localhost
    connection: local
    remote_user: root
@@ -8,16 +12,11 @@
        - package:
            name: "{{ item }}"
            state: present
-           with_items: "{{ install_extra_packages }}"
-       #- package:
-       #    name: "virt-install"
-       #    state: present
-       #- package:
-       #    name: "libvirt-daemon"
-       #    state: present
-       #- package:
-       #    name: "openssh-server"
-       #    state: present
+         with_items:
+           - qemu-kvm-common
+           - virt-install
+           - libvirt-daemon
+           - openssh-server
        - service:
            name: "sshd"
            state: started
