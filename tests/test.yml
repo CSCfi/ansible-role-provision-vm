@@ -15,6 +15,10 @@
            name: "libvirt-daemon"
            state: present
        - file:
+           path: "/etc/libvirt/qemu/"
+           state: directory
+           recurse: yes
+       - file:
            path: "/etc/libvirt/qemu/{{ inventory_hostname }}.xml"
            state: touch
    vars:
