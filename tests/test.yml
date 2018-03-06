@@ -6,11 +6,14 @@
    remote_user: root
    pre_tasks:
        - package:
-           name: "{{ item }}"
+           name: "qemu-kvm-common"
            state: present
-           with_items:
-             - "qemu-kvm-common"
-             - "virt-install"
+       - package:
+           name: "virt-install"
+           state: present
+       - package:
+           name: "libvirt-daemon"
+           state: present
        - file:
            path: "/etc/libvirt/qemu/{{ inventory_hostname }}.xml"
            state: touch
