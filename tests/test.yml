@@ -23,7 +23,7 @@
            state: touch
    vars:
        - hyper: "localhost"
-       - internal_ip: "10.0.0.2"
+       - internal_ip: "127.0.0.1"
        - cloud_init_networks:
            - interface: eth0
              address: "{{ internal_ip }}"
