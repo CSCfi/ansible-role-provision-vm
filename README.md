@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/CSCfi/ansible-role-provision-vm.svg?branch=master)](https://travis-ci.org/CSCfi/ansible-role-provision-vm)
+
 # ansible-role-provision-vm
 Ansible role to kickstart a new KVM virtual machine. Uses either kickstart (flexible) or OpenStack images (fast!).
 
