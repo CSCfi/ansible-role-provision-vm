@@ -18,7 +18,7 @@ virt-install \
   --cpu=host \
 {% endif %}
   --graphics=vnc,keymap="fi" \
-  --os-variant=rhel6 \
+  --os-variant={{ os_variant }} \
   --wait={{ install_timeout }} \
   --location={{ install_url }} \
   --initrd-inject={{ runtime_tempdir }}/{{ inventory_hostname }}.ks \

@@ -91,6 +91,9 @@ env_virt_install: {}
 # If you want to define a specific CPU model
 #virt_install_cpu_model:
 
+# Specify an os-variant if you want
+os_variant: "rhel6"
+
 # Kickstart URL for the installation
 #install_url: http://mirror.example.com/pub/Centos/7/os/x86_64/
 

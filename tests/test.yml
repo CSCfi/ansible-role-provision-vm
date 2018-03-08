@@ -1,0 +1,49 @@
+---
+
+# This playbook is pretty bad, it's so that testing can run the playbook and
+#  configure most things, without it actually provisioning any VMs.
+# Don't use it as an example for what to do :)
+
+ - name: Playbook for CI testing.
+   hosts: localhost
+   connection: local
+   remote_user: root
+   pre_tasks:
+       - package:
+           name: "{{ item }}"
+           state: present
+         with_items:
+           - qemu-kvm-common
+           - virt-install
+           - libvirt-daemon
+           - openssh-server
+       - service:
+           name: "sshd"
+           state: started
+       - file:
+           path: "/etc/libvirt/qemu/"
+           state: directory
+           recurse: yes
+       - file:
+           path: "/etc/libvirt/qemu/{{ inventory_hostname }}.xml"
+           state: touch
+   vars:
+       - install_extra_packages:
+           - qemu-kvm-common
+           - virt-install
+           - libvirt-daemon
+           - openssh-server
+       - hyper: "localhost"
+       - internal_ip: "127.0.0.1"
+       - cloud_init_networks:
+           - interface: eth0
+             address: "{{ internal_ip }}"
+             netmask: 255.255.255.0
+       - bridges: [ "br-example" ]
+       - fqdn: "localhost"
+       - install_url: "http://www.nic.funet.fi/pub/Linux/INSTALL/Centos/7/os/x86_64/"
+       - root_password: "changemeorperish"
+
+   roles:
+       - ansible-role-provision-vm
+...
