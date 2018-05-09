@@ -40,17 +40,17 @@
       owner: root
       group: root
     become: yes
-    when: guest_exists | failed
+    when: guest_exists is failed
 
   - name: create a remote temp directory
     command: mktemp -d "{{ provision_tempdir }}/provision_vm.XXXX"
     register: temp_dir
-    when: guest_exists | failed
+    when: guest_exists is failed
 
   - name: Set playbook temp_dir as fact
     set_fact:
       runtime_tempdir: "{{ temp_dir.stdout }}"
-    when: guest_exists | failed
+    when: guest_exists is failed
 
   - name: Change ownership of temp directory
     file:
@@ -60,7 +60,7 @@
       owner: qemu
       group: qemu
     become: yes
-    when: guest_exists | failed
+    when: guest_exists is failed
 
   delegate_to: "{{ hyper }}"
   # End of block
@@ -69,14 +69,14 @@
   import_tasks: kickstart-guest.yml
   when:
     - guest_type is not defined or guest_type != "image"
-    - guest_exists | failed
+    - guest_exists is failed
 
 - name: Prepare to start the guest using an OpenStack image
   import_tasks: image-guest.yml
   when:
     - guest_type is defined
     - guest_type == 'image'
-    - guest_exists | failed
+    - guest_exists is failed
 
 - name: Deploy script to deploy VM
   template:
@@ -84,7 +84,7 @@
     dest: "{{runtime_tempdir}}/virt-install-script.sh.j2"
   become: yes
   delegate_to: "{{ hyper }}"
-  when: guest_exists | failed
+  when: guest_exists is failed
 
 - name: Start deployment of VM
   command: "bash {{runtime_tempdir}}/virt-install-script.sh.j2"
@@ -94,7 +94,7 @@
   environment: "{{ env_virt_install | default(omit) }}"
   delegate_to: "{{ hyper }}"
   register: virt_install_job
-  when: guest_exists | failed
+  when: guest_exists is failed
 
   # Force ansible to know the IP address of this host so it can connect
   # This fixes things if you don't have the IP address in DNS or /etc/hosts.
@@ -109,7 +109,7 @@
     timeout: 300
     search_regex: OpenSSH
   delegate_to: "{{ bastion_host | default(hyper) }}"
-  when: guest_exists | failed
+  when: guest_exists is failed
 
   # This attempts to handle the common case where the new VM has a new and
   # unknown host key, because you just rebuilt this VM. Modern linux distro's
@@ -123,7 +123,7 @@
   known_hosts:
     name: "{{ item }}"
     state: absent
-  when: guest_exists | failed
+  when: guest_exists is failed
   delegate_to: localhost
   with_items:
     - "{{ ansible_host | default('') }}"
@@ -132,7 +132,7 @@
 - name: Wait for ssh key configuration by cloud-init
   pause: seconds=10
   when:
-    - guest_exists | failed
+    - guest_exists is failed
     - guest_type is defined
     - guest_type == 'image'
 
@@ -142,5 +142,5 @@
     state: absent
   become: yes
   delegate_to: "{{ hyper }}"
-  when: guest_exists | failed
+  when: guest_exists is failed
 ...
