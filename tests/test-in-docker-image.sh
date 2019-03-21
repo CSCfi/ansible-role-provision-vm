@@ -120,10 +120,14 @@ function test_playbook(){
 }
 function extra_tests(){
 
-    echo "TEST: list all generate kickstart configs"
+    echo "TEST: list all generated kickstart configs"
     find /tmp/ -name *.ks -exec ls {} \;
-    echo "TEST: print all generate kickstart configs"
-    find /tmp/ -name *.ks -exec cat {} \;
+    echo "TEST: print all generated kickstart configs"
+    find /tmp/ -name *.sh.j2 -exec cat {} \;
+    echo "TEST: list all generated virt-install scripts"
+    find /tmp/ -name *.ks -exec ls {} \;
+    echo "TEST: print all generated virt-install scripts"
+    find /tmp/ -name *.sh.j2 -exec cat {} \;
 
 }
 
