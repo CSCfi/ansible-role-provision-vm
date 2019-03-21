@@ -85,9 +85,9 @@ env_virt_install: {}
 #networks:
 #  - "network --onboot=on --device=eth0 --bootproto=static --ip=VM_IP --netmask=VM_NETMASK --gateway=VM_GATEWAY --nameserver=NAMESERVER --hostname=VM_HOSTNAME"
 
-# Root password in kickstart format, only including letters, numbers and , and .
+# Root password in kickstart format, only including letters, numbers and . and _ and ,
 # Don't want password to start with "-" because kickstart/anaconda dislike that.
-#root_password: "{{ lookup('password', 'credentials/'+ inventory_hostname  +'_rootpw length=15 chars=ascii_letters,digits,hexdigits,.,,') }}"
+#root_password: "{{ lookup('password', 'credentials/'+ inventory_hostname  +'_rootpw length=15 chars=ascii_letters,digits,hexdigits,.,_,,') }}"
 
 # If you want to define a specific CPU model
 #virt_install_cpu_model:
