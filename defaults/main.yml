@@ -9,6 +9,9 @@ install_timeout: "30"
 # Temp directory for storing provisioning related files
 provision_tempdir: "/tmp"
 
+# Cleanup runtime dir by default
+provision_cleanup_runtimedir: True
+
 # Where libvirt stores images and vms
 libvirt_root: "/var/lib/libvirt"
 

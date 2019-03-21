@@ -43,6 +43,8 @@
        - fqdn: "localhost"
        - install_url: "http://www.nic.funet.fi/pub/Linux/INSTALL/Centos/7/os/x86_64/"
        - root_password: "{{ lookup('password', 'credentials/'+ inventory_hostname  +'_rootpw length=15 chars=ascii_letters,digits,hexdigits,.,_,,') }}"
+       - root_password: "changemeorperish"
+       - provision_cleanup_runtimedir: False
 
    roles:
        - ansible-role-provision-vm

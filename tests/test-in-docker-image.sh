@@ -120,8 +120,10 @@ function test_playbook(){
 }
 function extra_tests(){
 
+    echo "TEST: list all generate kickstart configs"
+    find /tmp/ -name *.ks -exec ls {} \;
     echo "TEST: print all generate kickstart configs"
-    cat /tmp/provision_vm.*/localhost.ks
+    find /tmp/ -name *.ks -exec cat {} \;
 
 }
 

@@ -142,5 +142,5 @@
     state: absent
   become: yes
   delegate_to: "{{ hyper }}"
-  when: guest_exists is failed
+  when: guest_exists is failed and provision_cleanup_runtimedir
 ...
