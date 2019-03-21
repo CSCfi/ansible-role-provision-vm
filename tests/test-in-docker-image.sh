@@ -120,8 +120,8 @@ function test_playbook(){
 }
 function extra_tests(){
 
-    echo "TEST: ls /etc/puppet/*"
-    ls /etc/puppet/
+    echo "TEST: print all generate kickstart configs"
+    cat /tmp/provision_vm.*/localhost.ks
 
 }
 
@@ -137,7 +137,7 @@ function main(){
     test_playbook_syntax
     test_playbook
     test_playbook_check
-#    extra_tests
+    extra_tests
 
 }
 
