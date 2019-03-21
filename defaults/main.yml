@@ -87,7 +87,7 @@ env_virt_install: {}
 
 # Root password in kickstart format, only including letters, numbers and . and _ and ,
 # Don't want password to start with "-" because kickstart/anaconda dislike that.
-#root_password: "{{ lookup('password', 'credentials/'+ inventory_hostname  +'_rootpw length=15 chars=ascii_letters,digits,hexdigits,.,_,,') }}"
+#root_password: "{{ lookup('password', 'credentials/'+ inventory_hostname  +'_rootpw length=15 chars=ascii_letters,digits,.,_,,') }}"
 
 # If you want to define a specific CPU model
 #virt_install_cpu_model:
