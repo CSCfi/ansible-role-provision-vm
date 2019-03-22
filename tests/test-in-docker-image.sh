@@ -120,8 +120,14 @@ function test_playbook(){
 }
 function extra_tests(){
 
-    echo "TEST: ls /etc/puppet/*"
-    ls /etc/puppet/
+    echo "TEST: list all generated kickstart configs"
+    find /tmp/ -name *.ks -exec ls {} \;
+    echo "TEST: print all generated kickstart configs"
+    find /tmp/ -name *.ks -exec cat {} \;
+    echo "TEST: list all generated virt-install scripts"
+    find /tmp/ -name *.sh.j2 -exec ls {} \;
+    echo "TEST: print all generated virt-install scripts"
+    find /tmp/ -name *.sh.j2 -exec cat {} \;
 
 }
 
@@ -137,7 +143,7 @@ function main(){
     test_playbook_syntax
     test_playbook
     test_playbook_check
-#    extra_tests
+    extra_tests
 
 }
 

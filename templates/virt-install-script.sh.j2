@@ -11,8 +11,13 @@ virt-install \
   --connect=qemu:///system \
   --autostart \
   --noautoconsole \
+{% if provision_virt_install_extra_settings is defined %}
+{% for param in provision_virt_install_extra_settings %}
+  {{ param }} \
+{% endfor %}
+{% endif %}
 {% if guest_type is not defined or guest_type != "image" %}
-{% if ansible_distribution == "CentOS" and ansible_distribution_major_version == "7" %}
+{% if ansible_distribution == "CentOS" and ansible_distribution_major_version|int >= 7 %}
   --cpu=host-model \
 {% else %}
   --cpu=host \

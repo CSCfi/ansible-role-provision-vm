@@ -9,6 +9,9 @@ install_timeout: "30"
 # Temp directory for storing provisioning related files
 provision_tempdir: "/tmp"
 
+# Cleanup runtime dir by default
+provision_cleanup_runtimedir: True
+
 # Where libvirt stores images and vms
 libvirt_root: "/var/lib/libvirt"
 
@@ -89,8 +92,9 @@ env_virt_install: {}
 # Don't want password to start with "-" because kickstart/anaconda dislike that.
 #root_password: "{{ lookup('password', 'credentials/'+ inventory_hostname  +'_rootpw length=15 chars=ascii_letters,digits,.,_,,') }}"
 
-# If you want to define a specific CPU model
-#virt_install_cpu_model:
+# If you want extra parameters in virt-install you may use this as an example:
+#provision_virt_install_extra_settings:
+# - "--numatune 1"
 
 # Specify an os-variant if you want
 os_variant: "rhel6"
