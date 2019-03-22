@@ -23,6 +23,11 @@ guest_type: image          # Defaults to "kickstart"
 #vcpus: 1
 #ram: 1024
 
+# Numa tuning and ship console via syslog with virt-install:
+#provision_virt_install_extra_settings:
+# - "--numatune 1"
+# - "--serial udp,host=10.0.0.1:514"
+
 # Extra disks
 #disks:
 #  - path: "{{ libvirt_root }}/{{ fqdn }}.raw"
@@ -45,7 +50,7 @@ guest_type: image          # Defaults to "kickstart"
 
 # If you want to add all your users, use an `adminusers` dictionary as required
 # for ansible-role-users:
-#   https://github.com/CSC-IT-Center-for-Science/ansible-role-users
+#   https://github.com/CSCfi/ansible-role-users
 #
 # You can also add a custom user to your guests for bootstrapping
 #bootstrap_user: bootstrap
@@ -61,5 +66,5 @@ default_gateway: 1.2.3.4
 Optional (and only for Kickstart):
 ```
 install_url: "http://www.nic.funet.fi/pub/Linux/INSTALL/Centos/7/os/x86_64/"
-root_password: "{{ lookup('password', 'credentials/'+ inventory_hostname  +'_rootpw length=15') }}"
+root_password: "{{ lookup('password', 'credentials/'+ inventory_hostname  +'_rootpw length=15 chars=ascii_letters,digits,.,_,,') }}"
 ```
