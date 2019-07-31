@@ -130,6 +130,9 @@ os_variant: "rhel6"
 image_url_prefix: http://cloud.centos.org/centos/7/images/
 image_name: CentOS-7-x86_64-GenericCloud.qcow2
 
+# In case your image deployment is lightning fast you can set for example:
+#provisioning_wait_seconds: "10"
+
 timezone: Europe/Helsinki
 
 # List of admin users to add to new VM
