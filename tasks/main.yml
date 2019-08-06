@@ -130,7 +130,7 @@
     - "{{ inventory_hostname }}"
   ignore_errors: yes
 - name: Wait for ssh key configuration by cloud-init
-  pause: seconds=10
+  pause: seconds="{{ provisioning_wait_seconds|default(20) }}"
   when:
     - guest_exists is failed
     - guest_type is defined
