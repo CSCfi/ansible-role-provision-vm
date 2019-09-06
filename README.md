@@ -12,11 +12,12 @@ hyper: hypervisor_hostname # Host where guest will be deployed.
 internal_ip: 1.2.3.4       # Primary IP address of the guest
 bridges:                   # One or more linux bridges on the hypevisor to connect VMs to
   - br-example
-fqdn: hypervisor_hostname.fully.qualified.example
 ```
 
 Optional:
 ```
+fqdn: "{{ inventory_hostname }}"    # Defaults to the inventroy_hostname
+
 guest_type: image          # Defaults to "kickstart"
 
 # Bigger guests
