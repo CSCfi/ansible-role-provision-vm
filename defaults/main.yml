@@ -3,6 +3,7 @@
 # Common settings ###############################
 #################################################
 
+fqdn: "{{ inventory_hostname }}"
 # Time to wait for install to finish (in minutes)
 install_timeout: "30"
 
