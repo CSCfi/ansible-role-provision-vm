@@ -3,7 +3,6 @@
 # Common settings ###############################
 #################################################
 
-fqdn: "{{ inventory_hostname }}"
 # Time to wait for install to finish (in minutes)
 install_timeout: "30"
 
@@ -49,7 +48,7 @@ set_ansible_host_to_internal_ip: Yes
 
 # Disks
 disks:
-  - path: "{{ image_path }}/{{ fqdn }}.raw"
+  - path: "{{ image_path }}/{{ inventory_hostname }}.raw"
     size: "{{ root_disk_size }}"
 
 # What packages to exclude in yum.conf at install time

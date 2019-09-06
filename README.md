@@ -16,8 +16,6 @@ bridges:                   # One or more linux bridges on the hypevisor to conne
 
 Optional:
 ```
-fqdn: "{{ inventory_hostname }}"    # Defaults to the inventroy_hostname
-
 guest_type: image          # Defaults to "kickstart"
 
 # Bigger guests
@@ -31,7 +29,7 @@ guest_type: image          # Defaults to "kickstart"
 
 # Extra disks
 #disks:
-#  - path: "{{ libvirt_root }}/{{ fqdn }}.raw"
+#  - path: "{{ libvirt_root }}/{{ inventory_hostname }}.raw"
 #    size: 40
 
 # Networking setup

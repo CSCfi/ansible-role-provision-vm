@@ -30,6 +30,6 @@ virt-install \
   --extra-args="ks=file:/{{ inventory_hostname }}.ks"
 {% else %}
   --events on_poweroff=preserve \
-  --disk path={{ image_path}}/{{ fqdn }}.iso,device=cdrom,perms=ro \
+  --disk path={{ image_path}}/{{ inventory_hostname }}.iso,device=cdrom,perms=ro \
   --os-type=linux
 {% endif %}
