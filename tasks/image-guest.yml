@@ -51,7 +51,7 @@
     copy:
       remote_src: true
       src: "{{ runtime_tempdir }}/cloud-init.iso"
-      dest: "{{ image_path}}/{{ fqdn }}.iso"
+      dest: "{{ image_path}}/{{ inventory_hostname }}.iso"
       mode: 0400
       owner: qemu
       group: qemu
@@ -61,7 +61,7 @@
     copy:
       remote_src: true
       src: "{{ image_path}}/{{ image_name }}"
-      dest: "{{ image_path}}/{{ fqdn }}.qcow2"
+      dest: "{{ image_path}}/{{ inventory_hostname }}.qcow2"
       mode: 0600
       owner: qemu
       group: qemu
@@ -80,7 +80,7 @@
       - "'7' in image_name"
 
   - name: Fix CentOS 7 image to networking
-    command: "/usr/bin/guestfish --rw -a {{ image_path}}/{{ fqdn }}.qcow2 -f {{ runtime_tempdir }}/modify-centos-image.guestfish"
+    command: "/usr/bin/guestfish --rw -a {{ image_path}}/{{ inventory_hostname }}.qcow2 -f {{ runtime_tempdir }}/modify-centos-image.guestfish"
     environment:
       LIBGUESTFS_BACKEND: direct # Fix first run on clean host with no VMs
     become: yes
@@ -89,7 +89,7 @@
       - "'7' in image_name"
 
   - name: Resize image to use whole disk
-    command: qemu-img resize {{ image_path}}/{{ fqdn }}.qcow2 {{ root_disk_size }}G
+    command: "qemu-img resize {{ image_path}}/{{ inventory_hostname }}.qcow2 {{ root_disk_size }}G"
     become: yes
 
   # This fact is picked up by the virt-install-command.j2 template and
@@ -97,7 +97,7 @@
   - name: Set the disk fact
     set_fact:
       disks:
-        - path: "{{ image_path}}/{{ fqdn }}.qcow2"
+        - path: "{{ image_path}}/{{ inventory_hostname }}.qcow2"
           size: "{{ root_disk_size }}"
           format: qcow2
 
