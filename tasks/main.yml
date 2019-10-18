@@ -21,7 +21,7 @@
 
   - name: group hypervisors by distro
     group_by:
-      key: "os_{{ ansible_distribution }}_{{ ansible_distribution_major_version }}"
+      key: "os_{{ ansible_distribution }}_{{ ansible_distribution_major_version }}"
 
   - name: Check if VM exists already
     virt:
