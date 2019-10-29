@@ -120,7 +120,9 @@ os_variant: "rhel6"
 # Optionally prepopulate /etc/hosts with the IP for the puppetmaster
 #puppetmaster_ip:
 
-
+# Optionally add extra post commands
+#provision_kickstart_extra_post_commands:
+# - "echo br_netfilter > /etc/modules-load.d/ks_br_netfilter.conf"
 
 #################################################
 # Image based deployment settings ###############
