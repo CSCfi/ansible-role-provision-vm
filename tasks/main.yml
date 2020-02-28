@@ -65,7 +65,7 @@
   delegate_to: "{{ hyper }}"
   # End of block
 
-- name: experimental Passthrough pci block
+- name: Experimental, find PCIe devices if search regex is provided and explicit device list is not provided
   block:
     - name: Passthrough PCI lookup
       command: "lspci"
