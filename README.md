@@ -43,6 +43,15 @@ guest_type: image          # Defaults to "kickstart"
 #    gateway: 1.2.3.4
 #    nameservers: [ 8.8.8.8 ]
  
+# Regex PCI passthrough
+# vm_passthrough_lookup_regex: '.*Mellanox.*'
+# In this example all devices that match the '.Mellanox.' regex will be passed through to the virtual machine.
+
+#Specific device PCI passthrough
+# vm_pci_passthrough_devices:
+#            - pci_0000_3b_00_3
+#            - pci_0000_3b_00_4
+#   In this example the specific devices pci_0000_3b_00_3 will be passed through to the virtual machine.
 
 
 #environment: default-environment

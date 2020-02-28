@@ -21,7 +21,7 @@
 
   - name: group hypervisors by distro
     group_by:
-      key: "os_{{ ansible_distribution }}_{{ ansible_distribution_major_version }}"
+      key: "os_{{ ansible_distribution }}_{{ ansible_distribution_major_version }}"
 
   - name: Check if VM exists already
     virt:
@@ -64,6 +64,45 @@
 
   delegate_to: "{{ hyper }}"
   # End of block
+
+- name: Experimental, find PCIe devices if search regex is provided and explicit device list is not provided
+  block:
+    - name: Passthrough PCI lookup
+      command: "lspci"
+      changed_when: false
+      register: pci_devices
+
+    - name: Vm node list lookup
+      command: "virsh nodedev-list"
+      changed_when: false
+      register: virsh_nodedev
+
+    - name: Set passthrough devices fact
+      set_fact:
+        pci_passthrough_devices: "{{ pci_devices.stdout | regex_findall(vm_passthrough_lookup_regex, multiline=True, ignorecase=True) | list }}"
+
+    - name: Set vm passthrough devices fact
+      set_fact:
+        vm_pci_passthrough_devices: |-
+          {% set devices = [] %}
+          {% for device in pci_passthrough_devices %}
+          {%   set node_dev = device.split()[0] | replace(":", "_") | replace(".", "_") %}
+          {%   set node_lookup = virsh_nodedev.stdout | regex_search('.*' ~ node_dev, multiline=True, ignorecase=True) %}
+          {%   if node_lookup %}
+          {%     set _ = devices.append(node_lookup) %}
+          {%   endif %}
+          {% endfor %}
+          {{ devices }}
+    - name: Show discovered devices
+      debug:
+        var: pci_passthrough_devices
+
+    - name: Show discovered nodes
+      debug:
+        var: vm_pci_passthrough_devices
+  when:
+    - vm_passthrough_lookup_regex is defined
+    - vm_pci_passthrough_devices is undefined
 
 - name: Prepare to start the guest using Kickstart
   import_tasks: kickstart-guest.yml

@@ -22,9 +22,14 @@ virt-install \
 {% else %}
   --cpu=host \
 {% endif %}
+{% for device in (vm_pci_passthrough_devices | default([])) %}
+  --host-device={{ device }} \
+{% endfor %}
   --graphics=vnc,keymap="fi" \
+{% if os_variant is defined %}
   --os-variant={{ os_variant }} \
-  --wait={{ install_timeout }} \
+ {% endif %}
+ --wait={{ install_timeout }} \
   --location={{ install_url }} \
   --initrd-inject={{ runtime_tempdir }}/{{ inventory_hostname }}.ks \
   --extra-args="ks=file:/{{ inventory_hostname }}.ks"
