@@ -5,7 +5,7 @@
 - block:
 
   - name: Ensure guestfish is installed
-    yum:
+    package:
       name: libguestfs-tools
       state: installed
     become: yes
