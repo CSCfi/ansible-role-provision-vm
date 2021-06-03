@@ -19,7 +19,7 @@ users:
   - name: {{ adminuser.name }}
     sudo: ALL=(ALL) NOPASSWD:ALL
     ssh-authorized-keys:
-{% for sshkey in pubkeys %}
-      - {{ sshkey }}
+{% for sshkey in adminuser.pubkeys %}
+      - {{ sshkey.pubkey }}
 {% endfor %}
 {% endfor %}
