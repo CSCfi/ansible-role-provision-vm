@@ -17,7 +17,7 @@
       url: "{{ image_url_prefix }}/{{ image_name }}"
       dest: "{{ image_path}}/{{ image_name }}"
       mode: 0400
-      owner: qemu
+      owner: "{{ provision_user }}"
       backup: yes
     become: yes
 
@@ -26,8 +26,8 @@
       src: "{{ item }}.j2"
       dest: "{{ runtime_tempdir }}/{{ item }}"
       mode: 0400
-      owner: qemu
-      group: qemu
+      owner: "{{ provision_user }}"
+      group: "{{ provision_group }}"
     with_items:
       - meta-data
       - user-data
@@ -43,8 +43,8 @@
     file:
       name: "{{ runtime_tempdir }}/cloud-init.iso"
       mode: 0400
-      owner: qemu
-      group: qemu
+      owner: "{{ provision_user }}"
+      group: "{{ provision_group }}"
     become: yes
 
   - name: Copy the iso for this guest
@@ -53,8 +53,8 @@
       src: "{{ runtime_tempdir }}/cloud-init.iso"
       dest: "{{ image_path}}/{{ inventory_hostname }}.iso"
       mode: 0400
-      owner: qemu
-      group: qemu
+      owner: "{{ provision_user }}"
+      group: "{{ provision_group }}"
     become: yes
 
   - name: Copy the image for this guest
@@ -63,8 +63,8 @@
       src: "{{ image_path}}/{{ image_name }}"
       dest: "{{ image_path}}/{{ inventory_hostname }}.qcow2"
       mode: 0600
-      owner: qemu
-      group: qemu
+      owner: "{{ provision_user }}"
+      group: "{{ provision_group }}"
     become: yes
 
   - name: Copy guestfish script to fix CentOS 7 image networking
@@ -72,8 +72,8 @@
       src: modify-centos-image.guestfish.j2
       dest: "{{ runtime_tempdir }}/modify-centos-image.guestfish"
       mode: 0600
-      owner: qemu
-      group: qemu
+      owner: "{{ provision_user }}"
+      group: "{{ provision_group }}"
     become: yes
     when:
       - "'centos' in image_name.lower()"

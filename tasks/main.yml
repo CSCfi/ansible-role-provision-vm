@@ -57,8 +57,8 @@
       path: "{{ runtime_tempdir }}"
       state: directory
       mode: 0700
-      owner: qemu
-      group: qemu
+      owner: "{{ provision_user }}"
+      group: "{{ provision_group }}"
     become: yes
     when: guest_exists is failed
 
