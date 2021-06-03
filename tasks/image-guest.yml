@@ -7,7 +7,7 @@
   - name: Ensure guestfish is installed
     package:
       name: libguestfs-tools
-      state: installed
+      state: present
     become: yes
 
   # Fetch a ready made OpenStack image.
