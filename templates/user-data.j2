@@ -19,5 +19,7 @@ users:
   - name: {{ adminuser.name }}
     sudo: ALL=(ALL) NOPASSWD:ALL
     ssh-authorized-keys:
-      - {{ adminuser.pubkey.split(' ')[:2] | join(" ") }}
+{% for sshkey in pubkeys %}
+      - {{ sshkey }}
+{% endfor %}
 {% endfor %}
