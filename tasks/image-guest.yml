@@ -5,9 +5,9 @@
 - block:
 
   - name: Ensure guestfish is installed
-    yum:
+    package:
       name: libguestfs-tools
-      state: installed
+      state: present
     become: yes
 
   # Fetch a ready made OpenStack image.
