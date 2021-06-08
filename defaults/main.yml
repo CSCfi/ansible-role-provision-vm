@@ -6,6 +6,10 @@
 # Time to wait for install to finish (in minutes)
 install_timeout: "30"
 
+# Provision linux user on each hypervisor
+provision_user: qemu
+provision_group: qemu
+
 # Temp directory for storing provisioning related files
 provision_tempdir: "/tmp"
 
