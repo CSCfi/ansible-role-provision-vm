@@ -53,6 +53,11 @@ guest_type: image          # Defaults to "kickstart"
 #            - pci_0000_3b_00_4
 #   In this example the specific devices pci_0000_3b_00_3 will be passed through to the virtual machine.
 
+# if you still in 2022 and beyond want to disable selinux, set
+# disable_selinux: True
+# or if you want to set selinux to permissive set this instead 
+# permissive_selinux: True 
+# by default selinux should be on ( os hardening 101 )
 
 #environment: default-environment
 
