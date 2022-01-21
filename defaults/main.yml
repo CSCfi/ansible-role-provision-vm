@@ -59,20 +59,21 @@ disks:
 yum_exclude: ""
 
 # The basic set of packages to install during provisioning
-base_packages:
- - vim*
- - man
- - mlocate
- - nc
- - strace
- - tcpdump
- - man
- - rsync
- - openssh-clients
- - lvm2
- - parted
- - mailx
- - dstat
+base_packages:[]
+#base_packages:
+# - vim*
+# - man
+# - mlocate
+# - nc
+# - strace
+# - tcpdump
+# - man
+# - rsync
+# - openssh-clients
+# - lvm2
+# - parted
+# - mailx
+# - dstat
 
 # Any additional packages to install during provisioning (as a list)
 extra_packages: []
