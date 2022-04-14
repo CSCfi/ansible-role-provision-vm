@@ -3,7 +3,7 @@ virt-install \
   --vcpus={{ vcpus }} \
   --ram={{ ram }} \
 {% for disk in disks %}
-  --disk path={{ disk.path }},cache=writethrough,device=disk,bus=virtio,size={{ disk.size }},format={{ disk.format | default('raw') }} \
+  --disk path={{ disk.path }},cache=writethrough,discard=unmap,device=disk,bus=virtio,size={{ disk.size }},format={{ disk.format | default('raw') }} \
 {% endfor %}
 {% for bridge in bridges %}
   --network bridge={{ bridge }},model=virtio \
