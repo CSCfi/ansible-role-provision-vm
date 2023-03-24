@@ -6,7 +6,11 @@ virt-install \
   --disk path={{ disk.path }},cache=writethrough,discard=unmap,device=disk,bus=virtio,size={{ disk.size }},format={{ disk.format | default('raw') }} \
 {% endfor %}
 {% for bridge in bridges %}
+{% if virtio_multiqueue is defined %}
+  --network bridge={{ bridge }},model=virtio,driver_name=vhost,driver_queues={{ vcpus }} \
+{% else %}
   --network bridge={{ bridge }},model=virtio \
+{% endif %}
 {% endfor %}
   --connect=qemu:///system \
   --autostart \
