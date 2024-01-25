@@ -165,3 +165,6 @@ adminusers: []
 # You can also add a custom user to your guests for bootstrapping
 #bootstrap_user: bootstrap
 #bootstrap_ssh_key: ""
+
+# Package name for Puppet agent
+puppet_agent_package: puppet
