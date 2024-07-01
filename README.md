@@ -53,11 +53,10 @@ guest_type: image          # Defaults to "kickstart"
 #            - pci_0000_3b_00_4
 #   In this example the specific devices pci_0000_3b_00_3 will be passed through to the virtual machine.
 
-# if you still in 2022 and beyond want to disable selinux, set
-# disable_selinux: True
-# or if you want to set selinux to permissive set this instead 
-# permissive_selinux: True 
-# by default selinux should be on ( os hardening 101 )
+# kickstart_selinux is an optional parameter that regulates kickstart instructions related with selinux
+# by default, kickstart_selinux is not defined and no selinux instructions will be added to the kickstart file, resulting in selinux being set to "enforcing" in the kickstarted operating system
+# kickstart_selinux can also be explicitly set to "enforcing", producing the same effect as above
+# kickstart_selinux can be set to "permissive" or "disabled", resulting in selinux being set respectively to "permissive" or "disabled" in the kickstarted operating system
 
 #environment: default-environment
 

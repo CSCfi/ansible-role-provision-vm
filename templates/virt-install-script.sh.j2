@@ -36,7 +36,7 @@ virt-install \
  --wait={{ install_timeout }} \
   --location={{ install_url }} \
   --initrd-inject={{ runtime_tempdir }}/{{ inventory_hostname }}.ks \
-{% if os_variant == "centos8" %}
+{% if os_variant not in ["rhel6", "rhel7"] %}
     --extra-args="inst.text inst.ks=file:/{{ inventory_hostname }}.ks"
 {% else %}
     --extra-args="ks=file:/{{ inventory_hostname }}.ks"
