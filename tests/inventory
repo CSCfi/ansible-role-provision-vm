@@ -1,4 +1,7 @@
-localhost
+login:
+    hosts:
+        localhost
+    vars:
+        os_variant: rhel7
 
-[login]
-localhost
+
