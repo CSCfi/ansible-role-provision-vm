@@ -1,7 +1,7 @@
 language: python
 
 sudo: required
-dist: trusty
+dist: focal
 group: edge
 
 services:
@@ -14,7 +14,7 @@ env:
   - IMAGE_BUILD_PLATFORM=stable-centos7
   - IMAGE_BUILD_PLATFORM=epel-centos7
 install:
-  - npm install -g validate-dockerfile
+  - npm install --location=global validate-dockerfile
 
 before_script:
   # TESTDIR = Where the stable-centos/Dockerfile is located
