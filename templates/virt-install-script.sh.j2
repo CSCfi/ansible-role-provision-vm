@@ -44,5 +44,5 @@ virt-install \
 {% else %}
   --events on_poweroff=preserve \
   --disk path={{ image_path}}/{{ inventory_hostname }}.iso,device=cdrom,perms=ro \
-  --os-type=linux
+  --os-type=generic
 {% endif %}
