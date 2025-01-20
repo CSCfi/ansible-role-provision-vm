@@ -11,14 +11,14 @@ users:
   - name: {{ bootstrap_user }}
     sudo: ALL=(ALL) NOPASSWD:ALL
 {% if bootstrap_ssh_key is defined %}
-    ssh-authorized-keys:
+    ssh_authorized_keys:
       - {{ bootstrap_ssh_key }}
 {% endif %}
 {% endif %}
 {% for adminuser in adminusers %}
   - name: {{ adminuser.name }}
     sudo: ALL=(ALL) NOPASSWD:ALL
-    ssh-authorized-keys:
+    ssh_authorized_keys:
 {% for sshkey in adminuser.pubkeys %}
       - {{ sshkey.pubkey }}
 {% endfor %}
