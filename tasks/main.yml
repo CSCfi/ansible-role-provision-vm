@@ -4,13 +4,23 @@
     that: hyper is defined
     msg: "hyper must be set to a hypervisor host where you want VMs to run"
 
-- name: Check network configuration for image-based deployments
+- name: Check network configuration for image-based centos7 deployments
   assert:
     that: cloud_init_networks is defined
     msg: "Please configure your networks using cloud_init_networks. See defaults/main.yml"
   when:
     - guest_type is defined
     - guest_type == 'image'
+    - os_variant == 'centos7'
+
+- name: Check network configuration for image-based almalinux9 deployments
+  assert:
+    that: ethernets is defined
+    msg: "Please configure your networks using ethernets variable. See defaults/main.yml"
+  when:
+    - guest_type is defined
+    - guest_type == 'image'
+    - os_variant == 'almalinux9'
 
 # Most of this code will run on the hypervisor as defined by the hyper varible
 # We use a block to reduce repeating the 'delegate_to' for every task
