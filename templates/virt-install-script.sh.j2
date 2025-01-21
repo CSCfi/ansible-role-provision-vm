@@ -1,10 +1,11 @@
 virt-install \
-  --name={{ inventory_hostname }} \
-  --vcpus={{ vcpus }} \
-  --ram={{ ram }} \
-{% for disk in disks %}
-  --disk path={{ disk.path }},cache=writethrough,discard=unmap,device=disk,bus=virtio,size={{ disk.size }},format={{ disk.format | default('raw') }} \
-{% endfor %}
+  --name {{ inventory_hostname }} \
+  --vcpus {{ vcpus }} \
+  --ram {{ ram }} \
+  --connect=qemu:///system \
+  --noautoconsole \
+  --autostart \
+  --graphics none \
 {% for bridge in bridges %}
 {% if virtio_multiqueue is defined %}
   --network bridge={{ bridge }},model=virtio,driver_name=vhost,driver_queues={{ vcpus }} \
@@ -12,15 +13,12 @@ virt-install \
   --network bridge={{ bridge }},model=virtio \
 {% endif %}
 {% endfor %}
-  --connect=qemu:///system \
-  --autostart \
-  --noautoconsole \
+{% if guest_type is not defined or guest_type != "image" %}
 {% if provision_virt_install_extra_settings is defined %}
 {% for param in provision_virt_install_extra_settings %}
   {{ param }} \
 {% endfor %}
 {% endif %}
-{% if guest_type is not defined or guest_type != "image" %}
 {% if ansible_distribution == "CentOS" and ansible_distribution_major_version|int >= 7 %}
   --cpu=host-model \
 {% else %}
@@ -30,19 +28,17 @@ virt-install \
   --host-device={{ device }} \
 {% endfor %}
   --graphics=vnc,keymap="fi" \
-{% if os_variant is defined %}
-  --os-variant={{ os_variant }} \
- {% endif %}
- --wait={{ install_timeout }} \
+  --wait={{ install_timeout }} \
   --location={{ install_url }} \
   --initrd-inject={{ runtime_tempdir }}/{{ inventory_hostname }}.ks \
 {% if os_variant not in ["rhel6", "rhel7"] %}
-    --extra-args="inst.text inst.ks=file:/{{ inventory_hostname }}.ks"
-{% else %}
-    --extra-args="ks=file:/{{ inventory_hostname }}.ks"
- {% endif %}
-{% else %}
-  --events on_poweroff=preserve \
-  --disk path={{ image_path}}/{{ inventory_hostname }}.iso,device=cdrom,perms=ro \
-  --os-type=linux
+    --extra-args="ks=file:/{{ inventory_hostname }}.ks" \
 {% endif %}
+{% elif guest_type == "image" %}
+  --import \
+  --disk {{ image_path}}/{{ inventory_hostname }}.iso,device=cdrom \
+  --virt-type kvm \
+{% endif %}
+{% for disk in disks %}
+  --disk path={{ disk.path }},cache=writethrough,discard=unmap,device=disk,bus=virtio,size={{ disk.size }},format={{ disk.format | default('raw') }}
+{% endfor %}
