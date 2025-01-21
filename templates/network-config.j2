@@ -1,0 +1,34 @@
+#network-config
+version: 2
+{% if ethernets is defined %}
+ethernets:
+{% for e in ethernets %}
+    {{ e.name }}:
+        addresses: 
+{% if e.address4 is defined %}
+            - {{ e.address4 }}
+{% endif %}
+{% if e.address6 is defined %}
+            - {{ e.address6 }}
+{% endif %}
+{%if e.gateway4 is defined %}
+        routes:
+            - to: 0.0.0.0/0
+              via: {{ e.gateway4 }}
+              on-link: true
+{% endif %}
+{%if e.gateway6 is defined %}
+        routes:
+            - to: ::/0
+              via: {{ e.gateway6 }}
+              on-link: true
+{% endif %}
+{% if e.nameservers is defined %}
+        nameservers:
+            addresses:
+{% for ns in e.nameservers %}
+                - {{ ns }}
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endif %}
