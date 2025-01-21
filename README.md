@@ -42,6 +42,15 @@ guest_type: image          # Defaults to "kickstart"
 #    netmask: 255.255.255.0
 #    gateway: 1.2.3.4
 #    nameservers: [ 8.8.8.8 ]
+
+# An example to configure ethernets variable for image based deployment
+# ethernets:
+#  - name: "{{ internal_interface }}"
+#    address6: "{{ ipv6_network_address }}{{ admin_network_prefix }}"
+#    gateway6: "{{ ipv6_gateway }}"
+#    nameservers: "{{ ipv6_dns_addresses }} + {{ ipv4_dns_addresses }}"
+#    address4: "{{ public_internet_address }}{{ public_internet_prefix }}"
+#    gateway4: "{{ ipv4_gateway}}"
  
 # Regex PCI passthrough
 # vm_passthrough_lookup_regex: '.*Mellanox.*'
