@@ -6,6 +6,7 @@
   - name: Debug ethernets variable
     debug:
       var: ethernets
+      verbosity: 1
 
   - name: Ensure guestfish is installed
     package:
