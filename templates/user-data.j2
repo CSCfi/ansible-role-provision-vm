@@ -16,10 +16,16 @@ users:
 {% endif %}
 {% endif %}
 {% for adminuser in adminusers %}
+{% if adminuser.state == "present" %}
   - name: {{ adminuser.name }}
     sudo: ALL=(ALL) NOPASSWD:ALL
     ssh-authorized-keys:
+{% if adminuser.pubkeys is defined %}
 {% for sshkey in adminuser.pubkeys %}
       - {{ sshkey.pubkey }}
 {% endfor %}
+{% elif adminuser.pubkey is defined %}
+      - {{ adminuser.pubkey }}
+{% endif %}
+{% endif %}
 {% endfor %}

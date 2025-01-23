@@ -3,6 +3,10 @@
 # Most of this code will run on the hypervisor as defined by the hyper varible
 # We use a block to reduce repeating the 'delegate_to' for every task
 - block:
+  - name: Debug ethernets variable
+    debug:
+      var: ethernets
+      verbosity: 1
 
   - name: Ensure guestfish is installed
     package:
@@ -31,12 +35,13 @@
     with_items:
       - meta-data
       - user-data
+      - network-config
     become: yes
 
   - name: Generate ISO for cloud-init
     command: genisoimage -output {{ runtime_tempdir }}/cloud-init.iso -volid \
              cidata -joliet -rock {{ runtime_tempdir }}/user-data \
-             {{ runtime_tempdir }}/meta-data
+             {{ runtime_tempdir }}/meta-data {{ runtime_tempdir}}/network-config
     become: yes
 
   - name: Fix permissions of cloud-init iso
@@ -89,7 +94,7 @@
       - "'7' in image_name"
 
   - name: Resize image to use whole disk
-    command: "qemu-img resize {{ image_path}}/{{ inventory_hostname }}.qcow2 {{ root_disk_size }}G"
+    command: "qemu-img resize -f qcow2 {{ image_path}}/{{ inventory_hostname }}.qcow2 {{ root_disk_size }}G"
     become: yes
 
   # This fact is picked up by the virt-install-command.j2 template and

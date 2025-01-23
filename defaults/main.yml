@@ -157,6 +157,14 @@ adminusers: []
 #    gateway: gateway_ip
 #    nameservers: [ ns1_ip, ns2_ip ]
 
+#An example to configure ethernets variable for image based deployment
+#ethernets:
+#- name: eth0
+#  address6: "{{ admin_network_address }}{{ admin_network_prefix }}"
+#  gateway6: "{{ admin_ipv6_gateway }}"
+#  nameservers: "{{ admin_ipv6_dns_addresses }} + {{ funet_ipv4_dns_addresses }}"
+#  address4: "{{ public_internet_address }}{{ public_internet_prefix }}"
+#  gateway4: gateway_ip
 
 # If you want to add all your users, use an `adminusers` dictionary as required
 # for ansible-role-users:
