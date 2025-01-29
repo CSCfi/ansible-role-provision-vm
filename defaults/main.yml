@@ -31,9 +31,6 @@ vcpus: 1
 # Default to 1GB of memory
 ram: 1024
 
-# Default environment name (suggested use case: dev/test/prod)
-environment: default-environment
-
 # The network bridges a VM should get interfaces on
 #bridges: br-example
 
