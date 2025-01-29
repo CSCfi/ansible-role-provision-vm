@@ -21,11 +21,6 @@ if [ "x$SUDO" == "x" ];then
     SUDO_OPTION=""
 fi
 
-if [ "${OS_TYPE}" == "stable-centos7-puppet5" ];then
-  echo "TEST: set tests/test5.yml as playbook"
-  ANSIBLE_PLAYBOOk="tests/test5.yml"
-fi
-
 ANSIBLE_EXTRA_VARS=""
 if [ "${ANSIBLE_VAR}x" == "x" ];then
     ANSIBLE_EXTRA_VARS=" -e \"${ANSIBLE_VAR}\" "
