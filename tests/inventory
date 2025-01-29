@@ -8,6 +8,7 @@ barfoo:
         server1:
     vars:
         os_variant: centos8
+        guest_type: image
         cloud_init_networks:
         - interface: eth0
           address: "{{ internal_ip }}"
@@ -18,6 +19,7 @@ foobar:
         server2:
     vars:
         os_variant: almalinux9
+        guest_type: image
         cloud_init_networks:
         - interface: eth0
           address: "{{ internal_ip }}"
