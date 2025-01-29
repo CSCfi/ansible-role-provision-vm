@@ -8,9 +8,17 @@ barfoo:
         server1:
     vars:
         os_variant: centos8
+        cloud_init_networks:
+        - interface: eth0
+          address: "{{ internal_ip }}"
+          netmask: 255.255.255.0
 
 foobar:
     hosts:
         server2:
     vars:
         os_variant: almalinux9
+        cloud_init_networks:
+        - interface: eth0
+          address: "{{ internal_ip }}"
+          netmask: 255.255.255.0
