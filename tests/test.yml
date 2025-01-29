@@ -5,7 +5,7 @@
 # Don't use it as an example for what to do :)
 
  - name: Playbook for CI testing.
-   hosts: localhost
+   hosts: testservers
    connection: local
    remote_user: root
    pre_tasks:

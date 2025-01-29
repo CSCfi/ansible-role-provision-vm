@@ -1,7 +1,16 @@
-login:
+testservers:
+    children:
+        barfoo:
+        foobar:
+
+barfoo:
     hosts:
-        localhost
+        server1:
     vars:
-        os_variant: rhel7
+        os_variant: centos8
 
-
+foobar:
+    hosts:
+        server2:
+    vars:
+        os_variant: almalinux9
