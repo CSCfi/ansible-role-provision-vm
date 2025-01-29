@@ -1,26 +1,34 @@
 testservers:
     children:
-        barfoo:
-        foobar:
+            centos8_cloud_init_image:
+            centos8_ethernets_image:
+            centos8_kickstart_install:
+            alma9_ethernets_image:
+            alma9_kickstart_install:
 
-barfoo:
-    hosts:
-        server1:
+centos8_cloud_init_image:
     vars:
         os_variant: centos8
         guest_type: image
         cloud_init_networks:
-        - interface: eth0
-          address: "{{ internal_ip }}"
-          netmask: 255.255.255.0
+        -   interface: eth0
+            address: "192.168.1.50"
+            netmask: "255.255.255.0"
+            
+centos8_ethernets_image:
+centos8_kickstart_install:
 
-foobar:
-    hosts:
-        server2:
+alma9_ethernets:
     vars:
-        os_variant: almalinux9
+        os_variant: alma9
         guest_type: image
-        cloud_init_networks:
-        - interface: eth0
-          address: "{{ internal_ip }}"
-          netmask: 255.255.255.0
+        ethernets:
+        -   name: eth0
+            address6: "2001:db8::1/64"
+            gateway6: "2001:db8::1"
+            nameservers: "8.8.8.8 + 2001:4860:4860::8888"
+            address4: "192.168.1.50/24"
+            gateway4: "192.168.1.1"
+
+alma9_kickstart_install:
+
