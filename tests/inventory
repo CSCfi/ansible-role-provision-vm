@@ -10,6 +10,7 @@ centos8_cloud_init_image:
     hosts:
         server1:
     vars:
+#        ansible_python_interpreter: /usr/bin/python3
         os_variant: centos8
         guest_type: image
         cloud_init_networks:
@@ -20,12 +21,15 @@ centos8_cloud_init_image:
 centos8_ethernets_image:
     hosts:
         server2:
+    vars:
+#        ansible_python_interpreter: /usr/bin/python3
 
 centos8_kickstart_install:
     hosts:
         server3:
     vars:
         os_variant: centos8
+#        ansible_python_interpreter: /usr/bin/python3
 
 alma9_ethernets:
     hosts:
