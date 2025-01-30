@@ -8,7 +8,7 @@ testservers:
 
 centos8_cloud_init_image:
     hosts:
-        centos8_cloud_init_image:
+        server1:
     vars:
         os_variant: centos8
         guest_type: image
@@ -18,11 +18,18 @@ centos8_cloud_init_image:
             netmask: "255.255.255.0"
 
 centos8_ethernets_image:
+    hosts:
+        server2:
+
 centos8_kickstart_install:
+    hosts:
+        server3:
+    vars:
+        os_variant: centos8
 
 alma9_ethernets:
     hosts:
-        alma9_ethernets_image:
+        server4:
     vars:
         os_variant: alma9
         guest_type: image
@@ -35,4 +42,7 @@ alma9_ethernets:
             gateway4: "192.168.1.1"
 
 alma9_kickstart_install:
-
+    hosts:
+        server5:
+    vars:
+        os_variant: alma9
