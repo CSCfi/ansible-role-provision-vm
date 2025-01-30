@@ -7,6 +7,8 @@ testservers:
             alma9_kickstart_install:
 
 centos8_cloud_init_image:
+    hosts:
+        centos8_cloud_init_image:
     vars:
         os_variant: centos8
         guest_type: image
@@ -14,11 +16,13 @@ centos8_cloud_init_image:
         -   interface: eth0
             address: "192.168.1.50"
             netmask: "255.255.255.0"
-            
+
 centos8_ethernets_image:
 centos8_kickstart_install:
 
 alma9_ethernets:
+    hosts:
+        alma9_ethernets_image:
     vars:
         os_variant: alma9
         guest_type: image
