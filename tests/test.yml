@@ -45,8 +45,6 @@
             - "--numatune 1"
             - "--graphics vnc,password={{ root_password }}"
             - "--serial udp,host=10.0.0.1:514"
-        - ansible_python_interpreter: /usr/bin/python3
-
 
    roles:
        - ansible-role-provision-vm
