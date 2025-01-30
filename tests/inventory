@@ -10,7 +10,7 @@ centos8_cloud_init_image:
     hosts:
         server1:
     vars:
-#        ansible_python_interpreter: auto
+        ansible_python_interpreter: auto
         os_variant: centos8
         guest_type: image
         cloud_init_networks:
@@ -34,7 +34,6 @@ alma9_ethernets_image:
     hosts:
         server4:
     vars:
-#        ansible_python_interpreter: /usr/bin/python3
         os_variant: almalinux9
         guest_type: image
         ethernets:
