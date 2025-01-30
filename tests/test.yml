@@ -17,6 +17,7 @@
            - virt-install
            - libvirt-daemon
            - openssh-server
+           - python3-dnf
        - service:
            name: "sshd"
            state: started
