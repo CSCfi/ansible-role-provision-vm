@@ -10,6 +10,7 @@ centos8_cloud_init_image:
     hosts:
         server1:
     vars:
+        interpreter_python: /usr/bin/python3
         os_variant: centos8
         guest_type: image
         cloud_init_networks:
