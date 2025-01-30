@@ -34,6 +34,7 @@ alma9_ethernets_image:
     hosts:
         server4:
     vars:
+        ansible_python_interpreter: /usr/libexec/platform-python
         os_variant: almalinux9
         guest_type: image
         ethernets:
