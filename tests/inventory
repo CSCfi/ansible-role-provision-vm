@@ -34,7 +34,7 @@ alma9_ethernets_image:
     hosts:
         server4:
     vars:
-        os_variant: alma9
+        os_variant: almalinux9
         guest_type: image
         ethernets:
         -   name: eth0
@@ -48,4 +48,4 @@ alma9_kickstart_install:
     hosts:
         server5:
     vars:
-        os_variant: alma9
+        os_variant: almalinux9
