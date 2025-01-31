@@ -13,11 +13,8 @@
            name: "{{ item }}"
            state: present
          with_items:
-           - qemu-kvm-common
-           - virt-install
-           - libvirt-daemon
-           - openssh-server
-           - python3-dnf
+            - "{{ install_extra_packages }}"
+              
        - service:
            name: "sshd"
            state: started
@@ -29,11 +26,12 @@
            path: "/etc/libvirt/qemu/{{ inventory_hostname }}.xml"
            state: touch
    vars:
-        - install_extra_packages:
-            - qemu-kvm-common
-            - virt-install
-            - libvirt-daemon
-            - openssh-server
+#        - install_extra_packages:
+#            - qemu-kvm-common
+#            - virt-install
+#            - libvirt-daemon
+#            - openssh-server
+#            - python3-dnf
         - hyper: "localhost"
         - internal_ip: "127.0.0.1"
         - bridges: [ "br-example" ]
