@@ -1,0 +1,12 @@
+ansible_python_interpreter: auto
+os_variant: almalinux9
+guest_type: image
+ethernets:
+-   name: eth0
+    address6: "2001:db8::1/64"
+    gateway6: "2001:db8::1"
+    nameservers:
+    - "8.8.8.8"
+    - 2001:4860:4860::8888"
+    address4: "192.168.1.50/24"
+    gateway4: "192.168.1.1"

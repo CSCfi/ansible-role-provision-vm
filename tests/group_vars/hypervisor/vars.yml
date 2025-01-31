@@ -1,0 +1,9 @@
+install_extra_packages:
+- libguestfs-tools
+- libvirt
+- openssh-server
+- python3-libvirt
+- qemu-kvm
+- qemu-img
+- virt-install
+- virt-top
