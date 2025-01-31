@@ -6,7 +6,7 @@ RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* && \
     dnf -y install acl sudo && \
     dnf -y install python39 epel-release && \
     dnf -y update libmodulemd && \
-    dnf-y groupinstall "Development Tools" && \
+    dnf -y groupinstall "Development Tools" && \
     dnf -y install python3-pyyaml python3-jinja2 python3-setuptools && \
     python3 -m pip install --upgrade pip && \
     pip3 -V && \
