@@ -32,13 +32,13 @@ RUN python3 -m pip install --user --upgrade pip && \
 ENV PATH="/home/ansibleuser/.local/bin:${PATH}"
 
 # Switch back to root to reinstall dnf-related dependencies (if needed)
-USER root
-RUN dnf reinstall -y python3-dnf dnf
+#USER root
+#RUN dnf reinstall -y python3-dnf dnf
 
 # Verify that the dnf module is importable
-RUN /usr/bin/python3 -c "import dnf; print(dnf)"
+#RUN /usr/bin/python3 -c "import dnf; print(dnf)"
 
 # Switch back to the non-root user
-USER ansibleuser
+#USER ansibleuser
 
 CMD ["/bin/bash"]
