@@ -4,30 +4,32 @@
 #  configure most things, without it actually provisioning any VMs.
 # Don't use it as an example for what to do :)
 
- - name: Playbook for CI testing.
-   hosts: hyper
-   remote_user: root
-   pre_tasks:
-       - package:
-           name: "{{ item }}"
-           state: present
-         loop: "{{ install_extra_packages }}"
-         when: install_extra_packages is defined
+-   name: Playbook for CI testing.
+    hosts: hyper
+    remote_user: root
+    pre_tasks:
+        - package:
+            name: "{{ item }}"
+            state: present
+            loop: "{{ install_extra_packages }}"
+            when: install_extra_packages is defined
 
-       - service:
+        - service:
            name: "sshd"
            state: started
 
-       - file:
+        - file:
            path: "/etc/libvirt/qemu/"
            state: directory
            recurse: yes
 
-       - file:
+        - file:
            path: "/etc/libvirt/qemu/{{ inventory_hostname }}.xml"
            state: touch
+    roles:
+        - ansible-role-provision-vm
 
-   vars:
+    vars:
         - hyper: "hypervisor"
         - internal_ip: "127.0.0.1"
         - bridges: [ "br-example" ]
@@ -41,6 +43,4 @@
             - "--serial udp,host=10.0.0.1:514"
         - ansible_python_interpreter: auto
 
-   roles:
-       - ansible-role-provision-vm
 ...
