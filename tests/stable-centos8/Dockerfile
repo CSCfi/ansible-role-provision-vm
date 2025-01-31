@@ -33,7 +33,7 @@ ENV PATH="/home/ansibleuser/.local/bin:${PATH}"
 
 # Switch back to root to reinstall dnf-related dependencies (if needed)
 USER root
-RUN dnf reinstall -y python3-dnf dnf libselinux-python
+RUN dnf reinstall -y python3-dnf dnf
 
 # Verify that the dnf module is importable
 RUN /usr/bin/python3 -c "import dnf; print(dnf)"

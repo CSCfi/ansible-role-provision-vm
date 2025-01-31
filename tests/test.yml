@@ -6,15 +6,16 @@
 
  - name: Playbook for CI testing.
    hosts: testservers
-   connection: local
+#   connection: local
    remote_user: root
    pre_tasks:
        - package:
            name: "{{ item }}"
            state: present
-         delegate_to: localhost
          loop: "{{ install_extra_packages }}"
+         delegate_to: localhost
          when: install_extra_packages is defined
+
 
        - service:
            name: "sshd"
@@ -26,7 +27,7 @@
            state: directory
            recurse: yes
          delegate_to: localhost
-         
+
        - file:
            path: "/etc/libvirt/qemu/{{ inventory_hostname }}.xml"
            state: touch
