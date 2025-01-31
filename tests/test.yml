@@ -12,19 +12,26 @@
        - package:
            name: "{{ item }}"
            state: present
+         delegate_to: localhost
          loop: "{{ install_extra_packages }}"
          when: install_extra_packages is defined
-              
+
        - service:
            name: "sshd"
            state: started
+         delegate_to: localhost
+
        - file:
            path: "/etc/libvirt/qemu/"
            state: directory
            recurse: yes
+         delegate_to: localhost
+         
        - file:
            path: "/etc/libvirt/qemu/{{ inventory_hostname }}.xml"
            state: touch
+         delegate_to: localhost
+
    vars:
         - install_extra_packages:
             - libguestfs-tools
