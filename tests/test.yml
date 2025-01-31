@@ -27,13 +27,14 @@
            state: touch
    vars:
         - install_extra_packages:
+            - libguestfs-tools
+            - libvirt
+            - openssh-server
+            - python3-libvirt
             - qemu-kvm
             - qemu-img
-            - libvirt
-            - python3-libvirt
-            - libguestfs-tools
             - virt-install
-            - virt-top  
+            - virt-top
         - hyper: "localhost"
         - internal_ip: "127.0.0.1"
         - bridges: [ "br-example" ]

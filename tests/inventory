@@ -6,15 +6,7 @@ testservers:
         alma9_ethernets_image:
         alma9_kickstart_install:
 
-vars:
-    install_extra_packages:
-        - qemu-kvm
-        - qemu-img
-        - libvirt
-        - python3-libvirt
-        - libguestfs-tools
-        - virt-install
-        - virt-top  
+
 
 centos8_cloud_init_image:
     hosts:
