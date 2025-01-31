@@ -13,9 +13,9 @@ RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* && \
     pip3 install pbr debtcollector==0.5.0 stevedore==1.5.0 && \
     pip3 install pysphere boto boto3 passlib && \
     dnf -y autoremove && \
-    dnf -y install bzip2 crontabs file findutils gem git gzip hg procps-ng svn sudo tar tree which unzip xz zip && \
+    dnf -y install crontabs gem hg svn tree && \
     pip3 install ansible==2.9.27 && \
-    dnf reinstall -y python3-dnf dnf python3-libselinux && \
+    dnf reinstall -y python3-dnf dnf libselinux-python && \
     /usr/bin/python3 -c "import dnf; print(dnf)"
     
 CMD ["/bin/bash"]
