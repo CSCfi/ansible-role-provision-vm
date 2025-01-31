@@ -5,6 +5,15 @@ testservers:
             centos8_kickstart_install:
             alma9_ethernets_image:
             alma9_kickstart_install:
+vars:
+    install_extra_packages:
+        - qemu-kvm
+        - qemu-img
+        - libvirt
+        - python3-libvirt
+        - libguestfs-tools
+        - virt-install
+        - virt-top  
 
 centos8_cloud_init_image:
     hosts:
@@ -32,13 +41,14 @@ centos8_ethernets_image:
     vars:
         os_variant: centos8
         install_extra_packages:
-            - qemu-kvm
-            - qemu-img
-            - libvirt
-            - python3-libvirt
-            - libguestfs-tools
-            - virt-install
-            - virt-top
+        - libguestfs-tools
+        - libvirt
+        - openssh-server
+        - python3-libvirt
+        - qemu-kvm
+        - qemu-img
+        - virt-install
+        - virt-top
 
 centos8_kickstart_install:
     hosts:
@@ -46,14 +56,14 @@ centos8_kickstart_install:
     vars:
         os_variant: centos8
         install_extra_packages:
-            - qemu-kvm
-            - qemu-img
-            - libvirt
-            - python3-libvirt
-            - libguestfs-tools
-            - virt-install
-            - virt-top
-
+        - libguestfs-tools
+        - libvirt
+        - openssh-server
+        - python3-libvirt
+        - qemu-kvm
+        - qemu-img
+        - virt-install
+        - virt-top
 
 alma9_ethernets_image:
     hosts:
