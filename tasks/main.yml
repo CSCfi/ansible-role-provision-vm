@@ -4,14 +4,14 @@
     that: hyper is defined
     msg: "hyper must be set to a hypervisor host where you want VMs to run"
 
-- name: Check network configuration for image-based centos7 deployments
+- name: Check network configuration for image-based centos8 deployments
   assert:
     that: cloud_init_networks is defined
     msg: "Please configure your networks using cloud_init_networks. See defaults/main.yml"
   when:
     - guest_type is defined
     - guest_type == 'image'
-    - os_variant == 'centos7'
+    - os_variant == 'centos8'
 
 - name: Check network configuration for image-based almalinux9 deployments
   assert:
@@ -31,7 +31,7 @@
 
   - name: group hypervisors by distro
     group_by:
-      key: "os_{{ ansible_distribution }}_{{ ansible_distribution_major_version }}"
+      key: "os_{{ ansible_distribution }}_{{ ansible_distribution_major_version }}"
 
   - name: Check if VM exists already
     virt:
@@ -134,6 +134,17 @@
   become: yes
   delegate_to: "{{ hyper }}"
   when: guest_exists is failed
+
+- name: Print the contents of the generated virt-install script
+  command: cat "{{ runtime_tempdir }}/virt-install-script.sh.j2"
+  register: script_contents
+  become: yes
+  delegate_to: "{{ hyper }}"
+  when: guest_exists is failed
+
+- name: Show script contents for debugging
+  debug:
+    var: script_contents.stdout_lines
 
 - name: Start deployment of VM
   command: "bash {{runtime_tempdir}}/virt-install-script.sh.j2"

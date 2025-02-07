@@ -1,22 +1,25 @@
 ---
 
-# This playbook is pretty bad, it's so that testing can run the playbook and
-#  configure most things, without it actually provisioning any VMs.
-# Don't use it as an example for what to do :)
-
 -   name: Playbook for CI testing.
-    hosts: hyper
+    hosts: hypervisor
     remote_user: root
+    vars:
+        - install_extra_packages:
+            - bridge-utils
+            - libvirt
+            - NetworkManager
+            - openssh-server
+            - python3-libvirt
+            - qemu-kvm
+            - qemu-img
+            - virt-install
+            - virt-top
     pre_tasks:
         - package:
             name: "{{ item }}"
             state: present
-            loop: "{{ install_extra_packages }}"
-            when: install_extra_packages is defined
-
-        - service:
-           name: "sshd"
-           state: started
+          when: install_extra_packages is defined
+          loop: "{{ install_extra_packages }}"
 
         - file:
            path: "/etc/libvirt/qemu/"
@@ -26,21 +29,59 @@
         - file:
            path: "/etc/libvirt/qemu/{{ inventory_hostname }}.xml"
            state: touch
-    roles:
-        - ansible-role-provision-vm
 
+        - service:
+            name: "{{ item }}"
+            state: started
+            enabled: yes
+          with_items:
+            - "sshd"
+            - "libvirtd"
+            - "NetworkManager"
+
+        - name: Create network bridge br-example
+          command: >
+            nmcli connection add type bridge con-name br-example ifname br-example 
+            ip4 192.168.1.1/24 
+            gw4 192.168.1.254
+          notify: restart network
+
+        - name: Add physical interface to the bridge
+          command: "nmcli connection add type ethernet con-name br-example-slave ifname eth0 master br-example"
+          notify: restart network
+        
+        - name: Add target VMs dynamically based on the hypervisor OS
+          ansible.builtin.add_host:
+            name: "{{ item }}"
+            groups: provision_vm
+          loop: >- 
+            {{ 
+              groups['centos8'] if ansible_distribution_major_version == '8' 
+              else (groups['centos8'] + groups['almalinux9']) 
+            }}
+          when: ansible_distribution_major_version == '8' or ansible_distribution_major_version == '9'
+
+    handlers:
+        - name: restart network
+          service:
+            name: NetworkManager
+            state: restarted
+
+-   name: Playbook for CI testing.
+    hosts: provision_vm
+    remote_user: root
     vars:
         - hyper: "hypervisor"
-        - internal_ip: "127.0.0.1"
         - bridges: [ "br-example" ]
-        - install_url: "http://www.nic.funet.fi/pub/Linux/INSTALL/Centos/7/os/x86_64/"
-        - root_password: "{{ lookup('password', 'credentials/'+ inventory_hostname  +'_rootpw length=15 chars=ascii_letters,digits,hexdigits,.,_,,') }}"
-        - root_password: "changemeorperish"
         - provision_cleanup_runtimedir: False
-        - provision_virt_install_extra_settings:
-            - "--numatune 1"
-            - "--graphics vnc,password={{ root_password }}"
-            - "--serial udp,host=10.0.0.1:514"
-        - ansible_python_interpreter: auto
+        - root_password: "{{ lookup('password', 'credentials/'+ inventory_hostname  +'_rootpw length=15 chars=ascii_letters,digits,hexdigits,.,_,,') }}"
+        - dns1: "8.8.8.8"
+        - network_mask: "255.255.255.0"
+        - network_prefix: "/24"
+        - network_gateway4: "192.168.1.1"
+        - internal_ip: "{{ network_address }}"
+
+    roles:
+        - ansible-role-provision-vm
 
 ...

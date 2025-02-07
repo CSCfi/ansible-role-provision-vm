@@ -1,1 +1,8 @@
 os_variant: centos8
+ansible_python_interpreter: auto
+install_url: "https://vault.centos.org/8-stream/BaseOS/x86_64/os/"
+image_url_prefix: "https://cloud.centos.org/centos/8/x86_64/images/"
+image_name: "CentOS-8-GenericCloud-8.4.2105-20210603.0.x86_64.qcow2"
+network_address: "192.168.1.50"
+provision_virt_install_extra_settings:
+  - "--extra-args=\"ip=[{{ network_address }}]::[{{ network_gateway4 }}]:{{ network_prefix|replace('/','') }}:{{ inventory_hostname }}:eth0:none nameserver=[{{ admin_ipv6_dns_addresses|join('],[') }}]\""

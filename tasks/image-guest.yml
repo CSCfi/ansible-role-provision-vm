@@ -38,6 +38,17 @@
       - network-config
     become: yes
 
+#The task below is for debugging purposes and can be removed when it is no longer needed.
+
+  - name: Read and print generated cloud-init files
+    command: cat "{{ runtime_tempdir }}/{{ item }}"
+    with_items:
+      - meta-data
+      - user-data
+      - network-config
+    register: cloud_init_files
+    changed_when: false
+
   - name: Generate ISO for cloud-init
     command: genisoimage -output {{ runtime_tempdir }}/cloud-init.iso -volid \
              cidata -joliet -rock {{ runtime_tempdir }}/user-data \
@@ -72,7 +83,7 @@
       group: "{{ provision_group }}"
     become: yes
 
-  - name: Copy guestfish script to fix CentOS 7 image networking
+  - name: Copy guestfish script to fix CentOS 8 image networking
     template:
       src: modify-centos-image.guestfish.j2
       dest: "{{ runtime_tempdir }}/modify-centos-image.guestfish"
@@ -82,16 +93,16 @@
     become: yes
     when:
       - "'centos' in image_name.lower()"
-      - "'7' in image_name"
+      - "'8' in image_name"
 
-  - name: Fix CentOS 7 image to networking
+  - name: Fix CentOS 8 image to networking
     command: "/usr/bin/guestfish --rw -a {{ image_path}}/{{ inventory_hostname }}.qcow2 -f {{ runtime_tempdir }}/modify-centos-image.guestfish"
     environment:
       LIBGUESTFS_BACKEND: direct # Fix first run on clean host with no VMs
     become: yes
     when:
       - "'centos' in image_name.lower()"
-      - "'7' in image_name"
+      - "'8' in image_name"
 
   - name: Resize image to use whole disk
     command: "qemu-img resize -f qcow2 {{ image_path}}/{{ inventory_hostname }}.qcow2 {{ root_disk_size }}G"
