@@ -28,6 +28,7 @@ before_install:
     }
     EOF
   - sudo systemctl restart docker
+  ## "lscpu" and "free -h" are useful for debugging
   - lscpu
   - free -h
 
