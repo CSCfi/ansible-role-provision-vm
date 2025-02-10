@@ -34,7 +34,6 @@ before_install:
 
 install:
   - npm install validate-dockerfile
-  - travis_wait mvn install
 
 before_script:
   # TESTDIR = Where the stable-centos/Dockerfile is located
