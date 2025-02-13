@@ -47,6 +47,7 @@
       - user-data
       - network-config
     register: cloud_init_files
+    become: yes
     changed_when: false
 
   - name: Generate ISO for cloud-init
