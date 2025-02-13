@@ -1,4 +1,7 @@
 ram: 4096
+internal_interface: eth0
 network_address: "192.168.1.51"
 networks:
-  - "network --onboot=on --device=eth0 --bootproto=static --ip={{ network_address }} --netmask={{ network_mask }} --gateway={{ network_gateway4 }} --nameserver={{ dns1 }} --hostname={{ ansible_hostname }}"
+  - "network --onboot=on --device={{ internal_interface }} --bootproto=static --ip={{ network_address }} --netmask={{ network_mask }} --gateway={{ network_gateway4 }} --nameserver={{ dns1 }} --hostname={{ ansible_hostname }}"
+provision_virt_install_extra_settings:
+  - "--extra-args=\"ip=[{{ network_address }}]::[{{ network_gateway4 }}]:{{ network_prefix|replace('/','') }}:{{ inventory_hostname }}:{{ internal_interface }}:none nameserver=[{{ dns1 }}]\""

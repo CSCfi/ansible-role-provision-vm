@@ -80,8 +80,6 @@
         - network_prefix: "/24"
         - network_gateway4: "192.168.1.1"
         - internal_ip: "{{ network_address }}"
-        - provision_virt_install_extra_settings:
-            - "--extra-args=\"ip=[{{ network_address }}]::[{{ network_gateway4 }}]:{{ network_prefix|replace('/','') }}:{{ inventory_hostname }}:eth0:none nameserver=[{{ dns1 }}]\""
 
     roles:
         - ansible-role-provision-vm

@@ -1,8 +1,9 @@
 ansible_python_interpreter: auto
 guest_type: image
 ram: 1536
+internal_interface: enp1s0
 network_address: "192.168.1.50"
 cloud_init_networks:
-- interface: eth0
+- interface: "{{ internal_interface }}"
   address: "{{ network_address }}"
   netmask: "{{ network_mask }}"
