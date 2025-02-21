@@ -14,7 +14,7 @@ matrix:
 
 env:
   - IMAGE_BUILD_PLATFORM=stable-centos8
-  - IMAGE_BUILD_PLATFORM=devel-alma9
+#  - IMAGE_BUILD_PLATFORM=devel-alma9
 #  - IMAGE_BUILD_PLATFORM=stable-alma9
 
 # Enable cgroups v2 for Docker
