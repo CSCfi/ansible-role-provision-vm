@@ -1,6 +1,6 @@
 guest_type: image
 vcpus: 2
-ram: 8192
+ram: 2048
 internal_interface: eth0
 network_address: "192.168.1.50"
 ethernets:
