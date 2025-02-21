@@ -54,7 +54,7 @@ before_script:
   - docker logs $DOCKER_CONTAINER_ID
 script:
   # Testing of this ansible-role:
-  - docker exec -ti $DOCKER_CONTAINER_ID /bin/sh -c "/$ROLETOTEST/tests/test-in-docker-image.sh $IMAGE_BUILD_PLATFORM"
+  - travis_wait 30 docker exec -ti $DOCKER_CONTAINER_ID /bin/sh -c "/$ROLETOTEST/tests/test-in-docker-image.sh $IMAGE_BUILD_PLATFORM"
 after_script:
   - >
     docker exec -ti $DOCKER_CONTAINER_ID /bin/sh -c 'echo -ne "------\nEND ANSIBLE TESTS\n------\nSystemD Units:\n------\n";
