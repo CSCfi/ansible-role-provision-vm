@@ -1,6 +1,5 @@
 language: python
 
-sudo: required
 dist: focal
 group: edge
 
