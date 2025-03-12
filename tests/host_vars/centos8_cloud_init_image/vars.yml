@@ -7,3 +7,5 @@ cloud_init_networks:
 - interface: "{{ internal_interface }}"
   address: "{{ network_address }}"
   netmask: "{{ network_mask }}"
+  nameservers:
+  - "{{ dns1 }}"
