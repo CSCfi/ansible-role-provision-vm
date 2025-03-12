@@ -35,7 +35,7 @@
     with_items:
       - meta-data
       - user-data
-      - network-config
+#      - network-config
     become: yes
 
 #The task below is for debugging purposes and can be removed when it is no longer needed.
@@ -45,7 +45,7 @@
     with_items:
       - meta-data
       - user-data
-      - network-config
+#      - network-config
     register: cloud_init_files
     become: yes
     changed_when: false
@@ -53,7 +53,8 @@
   - name: Generate ISO for cloud-init
     command: genisoimage -output {{ runtime_tempdir }}/cloud-init.iso -volid \
              cidata -joliet -rock {{ runtime_tempdir }}/user-data \
-             {{ runtime_tempdir }}/meta-data {{ runtime_tempdir}}/network-config
+             {{ runtime_tempdir }}/meta-data 
+            # {{ runtime_tempdir}}/network-config
     become: yes
 
   - name: Fix permissions of cloud-init iso
