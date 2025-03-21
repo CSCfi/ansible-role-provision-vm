@@ -2,7 +2,7 @@ guest_type: image
 vcpus: 2
 ram: 2048
 internal_interface: eth0
-network_address: "192.168.1.50"
+network_address: "192.168.1.52"
 ethernets:
 -   name: "{{ internal_interface }}"
     address4: "{{ network_address }}/24"
