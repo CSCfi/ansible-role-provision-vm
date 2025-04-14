@@ -168,16 +168,15 @@
   # https://dmsimard.com/2016/01/08/selinux-python-virtualenv-chroot-and-ansible-dont-play-nice/
   # Since this is a hassle this task is set to ignore errors. Pull requests
   # are welcome! ;-)
-- name: Clear known_hosts for new VM
-  known_hosts:
-    name: "{{ item }}"
-    state: absent
+- name: Remove known_hosts entry for exact hostname or IP
+  shell: ssh-keygen -R "{{ item }}"
   when: guest_exists is failed
   delegate_to: localhost
   with_items:
     - "{{ ansible_host | default('') }}"
     - "{{ inventory_hostname }}"
   ignore_errors: yes
+
 - name: Wait for ssh key configuration by cloud-init
   pause: seconds="{{ provisioning_wait_seconds|default(20) }}"
   when:
