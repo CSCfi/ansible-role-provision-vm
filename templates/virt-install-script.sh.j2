@@ -3,9 +3,12 @@ virt-install \
   --vcpus {{ vcpus }} \
   --ram {{ ram }} \
   --connect=qemu:///system \
-  --noautoconsole \
   --autostart \
-  --graphics none \
+{% if guest_type is defined and guest_type == "image" %}
+  --import \
+  --disk {{ image_path}}/{{ inventory_hostname }}.iso,device=cdrom \
+  --virt-type kvm \
+{% endif %}
 {% for bridge in bridges %}
 {% if virtio_multiqueue is defined %}
   --network bridge={{ bridge }},model=virtio,driver_name=vhost,driver_queues={{ vcpus }} \
@@ -32,12 +35,14 @@ virt-install \
   --location={{ install_url }} \
   --initrd-inject={{ runtime_tempdir }}/{{ inventory_hostname }}.ks \
 {% if os_variant not in ["rhel6", "rhel7"] %}
-    --extra-args="ks=file:/{{ inventory_hostname }}.ks" \
+  --extra-args="console=tty0 console=ttyS0,115200 inst.text inst.ks=file:/{{ inventory_hostname }}.ks" \
+{% else %}
+  --extra-args="ks=file:/{{ inventory_hostname }}.ks"
 {% endif %}
-{% elif guest_type == "image" %}
-  --import \
-  --disk {{ image_path}}/{{ inventory_hostname }}.iso,device=cdrom \
-  --virt-type kvm \
+{% endif %}
+{% if os_variant is defined %}
+  --os-variant={{ os_variant }} \
+  --os-type=linux \
 {% endif %}
 {% for disk in disks %}
   --disk path={{ disk.path }},cache=writethrough,discard=unmap,device=disk,bus=virtio,size={{ disk.size }},format={{ disk.format | default('raw') }}
