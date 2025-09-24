@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  author: Risto Laurikainen, Peter Jenkins
+  author: Risto Laurikainen, Peter Jenkins, Jukka Tuunanen
   description: Creates a KVM virtual machine with cloud-init capable images or Kickstart
   company: CSC - IT Center for Science Ltd.
   # If the issue tracker for your role is not on github, uncomment the
@@ -14,7 +14,7 @@ galaxy_info:
   # - Apache
   # - CC-BY
   license: MIT
-  min_ansible_version: 2.9.27
+  min_ansible_version: "2.9.27"
   #
   # Below are all platforms currently available. Just uncomment
   # the ones that apply to your role. If you don't see your
@@ -23,10 +23,8 @@ galaxy_info:
   platforms:
   - name: EL
     versions:
-  #  - all
-  #  - 5
-    - 6
-    - 7
+    - "8"
+    - "9"
   #- name: GenericUNIX
   #  versions:
   #  - all

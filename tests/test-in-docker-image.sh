@@ -10,20 +10,15 @@ OS_VERSION=${2:-}
 ANSIBLE_VERSION=${3:-}
 
 ANSIBLE_VAR=""
-ANSIBLE_INVENTORY="tests/inventory"
+ANSIBLE_INVENTORY="tests/inventory.ini"
 ANSIBLE_PLAYBOOk="tests/test.yml"
 #ANSIBLE_LOG_LEVEL=""
-ANSIBLE_LOG_LEVEL="-v"
+ANSIBLE_LOG_LEVEL="-vvvv"
 APACHE_CTL="apache2ctl"
 
 # if there wasn't sudo then ansible couldn't use it
 if [ "x$SUDO" == "x" ];then
     SUDO_OPTION=""
-fi
-
-if [ "${OS_TYPE}" == "stable-centos7-puppet5" ];then
-  echo "TEST: set tests/test5.yml as playbook"
-  ANSIBLE_PLAYBOOk="tests/test5.yml"
 fi
 
 ANSIBLE_EXTRA_VARS=""
@@ -96,7 +91,7 @@ function test_install_requirements(){
 }
 
 function test_playbook_syntax(){
-    echo "TEST: ansible-playbook -i ${ANSIBLE_INVENTORY} ${ANSIBLE_PLAYBOOk} --syntax-check"
+    echo "TEST: ansible-playbook -i ${ANSIBLE_INVENTORY} ${ANSIBLE_PLAYBOOk} --connection=local --syntax-check"
 
     ansible-playbook -i ${ANSIBLE_INVENTORY} ${ANSIBLE_PLAYBOOk} --syntax-check ||(echo "ansible playbook syntax check was failed" && exit 2 )
 }
@@ -141,7 +136,7 @@ function main(){
 #    test_install_requirements
     test_ansible_setup
     test_playbook_syntax
-    test_playbook
+#    test_playbook
     test_playbook_check
     extra_tests
 

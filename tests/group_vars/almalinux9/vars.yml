@@ -1,0 +1,17 @@
+os_variant: almalinux9
+install_url: https://www.nic.funet.fi/pub/mirrors/almalinux.org/9/BaseOS/x86_64/os/
+image_url_prefix: "https://www.nic.funet.fi/pub/mirrors/almalinux.org/9/cloud/x86_64/images/"
+image_name: "AlmaLinux-9-GenericCloud-latest.x86_64.qcow2"
+
+root_disk_size: 32
+
+disks:
+  - { path: "/var/lib/libvirt/images/{{ inventory_hostname }}.raw", size: "{{ root_disk_size }}" }
+kickstart_partitions:
+ - "part /boot --fstype=xfs --ondisk=vda --size=1024"
+ - "part pv.TESTOS --fstype=lvmpv --ondisk=vda --size=1 --grow"
+ - "volgroup vg.TESTOS pv.TESTOS"
+ - "logvol /  --fstype=xfs  --size=8192 --name=root --vgname=vg.TESTOS"
+ - "logvol /home  --fstype=xfs  --size=4096 --name=home --vgname=vg.TESTOS"
+ - "logvol /var  --fstype=xfs  --size=4096 --grow --name=var --vgname=vg.TESTOS"
+ - "logvol swap  --fstype=swap --size=2048 --name=swap --vgname=vg.TESTOS"
