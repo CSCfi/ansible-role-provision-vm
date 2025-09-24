@@ -1,55 +1,38 @@
 ---
 
-# This playbook is pretty bad, it's so that testing can run the playbook and
-#  configure most things, without it actually provisioning any VMs.
-# Don't use it as an example for what to do :)
+-   name: Playbook for CI testing.
+    hosts: localhost
+    remote_user: root
+    vars:
+      ansible_python_interpreter: /usr/libexec/platform-python
 
- - name: Playbook for CI testing.
-   hosts: localhost
-   connection: local
-   remote_user: root
-   pre_tasks:
-       - package:
-           name: "{{ item }}"
-           state: present
-         with_items:
-           - qemu-kvm-common
-           - virt-install
-           - libvirt-daemon
-           - openssh-server
-       - service:
-           name: "sshd"
-           state: started
-       - file:
-           path: "/etc/libvirt/qemu/"
-           state: directory
-           recurse: yes
-       - file:
-           path: "/etc/libvirt/qemu/{{ inventory_hostname }}.xml"
-           state: touch
-   vars:
-       - install_extra_packages:
-           - qemu-kvm-common
-           - virt-install
-           - libvirt-daemon
-           - openssh-server
-       - hyper: "localhost"
-       - internal_ip: "127.0.0.1"
-       - cloud_init_networks:
-           - interface: eth0
-             address: "{{ internal_ip }}"
-             netmask: 255.255.255.0
-       - bridges: [ "br-example" ]
-       - install_url: "http://www.nic.funet.fi/pub/Linux/INSTALL/Centos/7/os/x86_64/"
-       - root_password: "{{ lookup('password', 'credentials/'+ inventory_hostname  +'_rootpw length=15 chars=ascii_letters,digits,hexdigits,.,_,,') }}"
-       - root_password: "changemeorperish"
-       - provision_cleanup_runtimedir: False
-       - provision_virt_install_extra_settings:
-         - "--numatune 1"
-         - "--graphics vnc,password={{ root_password }}"
-         - "--serial udp,host=10.0.0.1:514"
+    pre_tasks:
+      - name: Add target VMs dynamically based on the hypervisor OS
+        ansible.builtin.add_host:
+          name: "{{ item }}"
+          groups: provision_vm
+        loop: >- 
+          {{ 
+            groups['centos8'] if ansible_distribution_major_version == '8' 
+            else (groups['centos8'] + groups['almalinux9']) 
+          }}
+        when: ansible_distribution_major_version == '8' or ansible_distribution_major_version == '9'
 
-
-   roles:
-       - ansible-role-provision-vm
+-   name: Playbook for CI testing.
+    hosts: provision_vm
+    serial: 1
+    gather_facts: yes
+    remote_user: root
+    vars:
+      hyper: "localhost"
+      dns:
+        - 8.8.8.8
+        - 1.1.1.1
+      network_mask: "255.255.255.0"
+      network_prefix: "/24"
+      network_gateway4: "192.168.1.1"
+      internal_ip: "{{ network_address }}"
+      ansible_python_interpreter: /usr/libexec/platform-python
+    roles:
+      - ansible-role-provision-vm
 ...

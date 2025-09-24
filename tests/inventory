@@ -1,7 +1,0 @@
-login:
-    hosts:
-        localhost
-    vars:
-        os_variant: rhel7
-
-

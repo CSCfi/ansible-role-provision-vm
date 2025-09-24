@@ -1,8 +1,7 @@
-language: python
+language: generic
 
-sudo: required
-dist: focal
-group: edge
+os: linux
+dist: jammy
 
 services:
   - docker
@@ -11,10 +10,11 @@ matrix:
   fast_finish: true
 
 env:
-  - IMAGE_BUILD_PLATFORM=stable-centos7
-  - IMAGE_BUILD_PLATFORM=epel-centos7
+  - IMAGE_BUILD_PLATFORM=stable-centos8
+  - IMAGE_BUILD_PLATFORM=stable-alma9
+
 install:
-  - npm install --location=global validate-dockerfile
+  - npm install validate-dockerfile
 
 before_script:
   # TESTDIR = Where the stable-centos/Dockerfile is located
@@ -24,12 +24,12 @@ before_script:
   - export COMMIT=${TRAVIS_COMMIT::8}
   # The tag we assign the docker image we build with the Dockerfile
   - export REPO=csc/ansible
-  # https://www.npmjs.com/package/validate-dockerfile - validate the Dockerfile
-  - docklint ${TESTDIR}/${IMAGE_BUILD_PLATFORM}/Dockerfile
-  # Build the image
+  # Validate the Dockerfile
+  - npx docklint ${TESTDIR}/${IMAGE_BUILD_PLATFORM}/Dockerfile
+  # Build the image with cgroups v2 support
   - docker build -t ${REPO}:${IMAGE_BUILD_PLATFORM} ${TESTDIR}/${IMAGE_BUILD_PLATFORM}/
-  # Launch the container
-  - docker run --privileged -d -ti -e "container=docker"  -v `pwd`:/$ROLETOTEST -v /sys/fs/cgroup:/sys/fs/cgroup  ${REPO}:${IMAGE_BUILD_PLATFORM}  /usr/sbin/init
+  # Launch the container with systemd and cgroups v2 enabled
+  - docker run --privileged --cgroupns=host -d -ti -e "container=docker" -v `pwd`:/$ROLETOTEST -v /sys/fs/cgroup:/sys/fs/cgroup:rw ${REPO}:${IMAGE_BUILD_PLATFORM} /usr/sbin/init
   - DOCKER_CONTAINER_ID=$(docker ps | grep ${IMAGE_BUILD_PLATFORM} | awk '{print $1}')
   - docker logs $DOCKER_CONTAINER_ID
 script:

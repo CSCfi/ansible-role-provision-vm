@@ -1,0 +1,11 @@
+guest_type: image
+vcpus: 2
+ram: 2048
+internal_interface: eth0
+network_address: "192.168.1.50"
+cloud_init_networks:
+- interface: "{{ internal_interface }}"
+  address: "{{ network_address }}"
+  netmask: "{{ network_mask }}"
+  gateway: "{{ network_gateway4 }}"
+  nameservers: "{{ dns }}"
