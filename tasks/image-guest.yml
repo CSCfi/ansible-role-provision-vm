@@ -3,6 +3,7 @@
 # Most of this code will run on the hypervisor as defined by the hyper varible
 # We use a block to reduce repeating the 'delegate_to' for every task
 - block:
+#The task below is for debugging purposes and can be removed when it is no longer needed.
   - name: Debug ethernets variable
     debug:
       var: ethernets
@@ -12,7 +13,7 @@
     package:
       name: libguestfs-tools
       state: present
-    become: yes
+    become: true
 
   # Fetch a ready made OpenStack image.
   # Read only, and owned by the qemu user.
@@ -23,7 +24,7 @@
       mode: 0400
       owner: "{{ provision_user }}"
       backup: yes
-    become: yes
+    become: true
 
   - name: Generate cloud-init meta-data
     template:
@@ -36,6 +37,18 @@
       - meta-data
       - user-data
       - network-config
+    become: true
+
+#The task below is for debugging purposes and can be removed when it is no longer needed.
+  - name: Read and print generated cloud-init files
+    command: cat "{{ runtime_tempdir }}/{{ item }}"
+    with_items:
+      - meta-data
+      - user-data
+      - network-config
+    register: cloud_init_files
+    become: true
+    changed_when: false
 
   - name: Generate ISO for cloud-init
     command: genisoimage -output {{ runtime_tempdir }}/cloud-init.iso -volid \
@@ -58,7 +71,7 @@
       mode: 0400
       owner: "{{ provision_user }}"
       group: "{{ provision_group }}"
-    become: yes
+    become: true
 
   - name: Copy the iso for this guest
     copy:
@@ -68,7 +81,7 @@
       mode: 0400
       owner: "{{ provision_user }}"
       group: "{{ provision_group }}"
-    become: yes
+    become: true
 
   - name: Copy the image for this guest
     copy:
@@ -78,32 +91,11 @@
       mode: 0600
       owner: "{{ provision_user }}"
       group: "{{ provision_group }}"
-    become: yes
-
-  - name: Copy guestfish script to fix CentOS 7 image networking
-    template:
-      src: modify-centos-image.guestfish.j2
-      dest: "{{ runtime_tempdir }}/modify-centos-image.guestfish"
-      mode: 0600
-      owner: "{{ provision_user }}"
-      group: "{{ provision_group }}"
-    become: yes
-    when:
-      - "'centos' in image_name.lower()"
-      - "'7' in image_name"
-
-  - name: Fix CentOS 7 image to networking
-    command: "/usr/bin/guestfish --rw -a {{ image_path}}/{{ inventory_hostname }}.qcow2 -f {{ runtime_tempdir }}/modify-centos-image.guestfish"
-    environment:
-      LIBGUESTFS_BACKEND: direct # Fix first run on clean host with no VMs
-    become: yes
-    when:
-      - "'centos' in image_name.lower()"
-      - "'7' in image_name"
+    become: true
 
   - name: Resize image to use whole disk
     command: "qemu-img resize -f qcow2 {{ image_path}}/{{ inventory_hostname }}.qcow2 {{ root_disk_size }}G"
-    become: yes
+    become: true
 
   # This fact is picked up by the virt-install-command.j2 template and
   # configures the VMs root disk
