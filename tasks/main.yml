@@ -4,14 +4,14 @@
     that: hyper is defined
     msg: "hyper must be set to a hypervisor host where you want VMs to run"
 
-- name: Check network configuration for image-based centos7 deployments
+- name: Check network configuration for image-based centos8 deployments
   assert:
     that: cloud_init_networks is defined
     msg: "Please configure your networks using cloud_init_networks. See defaults/main.yml"
   when:
     - guest_type is defined
     - guest_type == 'image'
-    - os_variant == 'centos7'
+    - os_variant == 'centos8'
 
 - name: Check network configuration for image-based almalinux9 deployments
   assert:

@@ -36,13 +36,21 @@
       - meta-data
       - user-data
       - network-config
-    become: yes
 
   - name: Generate ISO for cloud-init
     command: genisoimage -output {{ runtime_tempdir }}/cloud-init.iso -volid \
              cidata -joliet -rock {{ runtime_tempdir }}/user-data \
-             {{ runtime_tempdir }}/meta-data {{ runtime_tempdir}}/network-config
-    become: yes
+             {{ runtime_tempdir }}/meta-data 
+    become: true
+    when: os_variant == 'centos8'
+
+  - name: Generate ISO for cloud-init
+    command: genisoimage -output {{ runtime_tempdir }}/cloud-init.iso -volid \
+             cidata -joliet -rock {{ runtime_tempdir }}/user-data \
+             {{ runtime_tempdir }}/meta-data \ 
+             {{ runtime_tempdir}}/network-config
+    become: true
+    when: os_variant == 'almalinux9'
 
   - name: Fix permissions of cloud-init iso
     file:
