@@ -28,7 +28,7 @@ virt-install \
 {% for device in (vm_pci_passthrough_devices | default([])) %}
   --host-device={{ device }} \
 {% endfor %}
-  --graphics=vnc,keymap="fi" \
+  {{ kickstart_graphics | default('--nographics') }} \
   --wait={{ install_timeout }} \
   --location={{ install_url }} \
   --initrd-inject={{ runtime_tempdir }}/{{ inventory_hostname }}.ks \
