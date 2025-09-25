@@ -10,11 +10,13 @@ virt-install \
   --virt-type kvm \
 {% endif %}
 {% for bridge in bridges %}
+{% set bridge_config = "model=virtio" %}
 {% if virtio_multiqueue is defined %}
-  --network bridge={{ bridge }},model=virtio,driver_name=vhost,driver_queues={{ vcpus }} \
-{% else %}
-  --network bridge={{ bridge }},model=virtio \
+{% set bridge_config = bridge_config + ",driver_name=vhost,driver_queues=%s" % vcpus %}
+{% elif mac_address is defined %}
+{% set bridge_config = bridge_config + ",mac=%s" % mac_address %}
 {% endif %}
+  --network bridge={{ bridge }},{{ bridge_config }} \
 {% endfor %}
 {% if guest_type is not defined or guest_type != "image" %}
 {% if provision_virt_install_extra_settings is defined %}
