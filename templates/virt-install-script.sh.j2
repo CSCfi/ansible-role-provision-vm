@@ -34,7 +34,6 @@ virt-install \
   --initrd-inject={{ runtime_tempdir }}/{{ inventory_hostname }}.ks \
 {% if os_variant is defined %}
   --os-variant={{ os_variant }} \
-  --os-type=linux \
 {% endif %}
 {% for disk in disks %}
   --disk path={{ disk.path }},cache=writethrough,discard=unmap,device=disk,bus=virtio,size={{ disk.size }},format={{ disk.format | default('raw') }}
