@@ -1,7 +1,7 @@
 guest_type: image
 root_disk_size: 10
 vcpus: 2
-ram: 2048
+ram: 3072
 internal_interface: eth0
 network_address: "192.168.1.52"
 ethernets:

@@ -1,4 +1,4 @@
-ram: 2048
+ram: 3072
 root_disk_size: 10
 internal_interface: enp1s0
 network_address: "192.168.1.51"
