@@ -93,6 +93,12 @@
       group: "{{ provision_group }}"
     become: true
 
+# For debugging
+  - name: Check the image size
+    command: "qemu-img info {{ image_path}}/{{ inventory_hostname }}.qcow2"
+    become: true
+
+
   - name: Resize image to use whole disk
     command: "qemu-img resize -f qcow2 {{ image_path}}/{{ inventory_hostname }}.qcow2 {{ root_disk_size }}G"
     become: true
