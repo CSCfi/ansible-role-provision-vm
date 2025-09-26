@@ -18,7 +18,7 @@ virt-install \
 {% endif %}
   --network bridge={{ bridge }},{{ bridge_config }} \
 {% endfor %}
-{% set default_args = "console=tty0 inst.text plymouth.enable=0 " %}
+{% set default_args = "console=ttyS0,115200n8 serial inst.text plymouth.enable=0 " %}
 {% if guest_type is not defined or guest_type != "image" %}
 {% set default_args = default_args + "inst.ks=file:/%s.ks" % inventory_hostname %}
 {% set custom_args = provision_virt_install_extra_settings | join(' ') if provision_virt_install_extra_settings is defined else "" %}
