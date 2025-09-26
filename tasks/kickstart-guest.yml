@@ -2,7 +2,20 @@
 # Create a new guest using Kickstart
 
 - name: copy over kickstart file
-  template: src="kickstart.cfg" dest="{{ runtime_tempdir }}/{{ inventory_hostname }}.ks"
-  become: yes
+  template: 
+    src: "kickstart.cfg"
+    dest: "{{ runtime_tempdir }}/{{ inventory_hostname }}.ks"
+  become: true
   delegate_to: "{{ hyper }}"
+
+- name: Show .ks file contents for debugging
+  command: cat "{{ runtime_tempdir }}/{{ inventory_hostname }}.ks"
+  register: ks_file
+  become: true
+  delegate_to: "{{ hyper }}"
+
+- name: Show .ks file contents for debugging
+  debug:
+    var: ks_file.stdout_lines
+
 ...

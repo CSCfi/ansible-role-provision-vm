@@ -1,4 +1,10 @@
 ---
+#The task below is for debugging purposes and can be removed when it is no longer needed.
+- name: Debug hyper variable
+  debug:
+    var: hyper
+    verbosity: 1
+    
 - name: Check hyper is defined
   assert:
     that: hyper is defined
@@ -31,7 +37,7 @@
 
   - name: group hypervisors by distro
     group_by:
-      key: "os_{{ ansible_distribution }}_{{ ansible_distribution_major_version }}"
+      key: "os_{{ ansible_distribution }}_{{ ansible_distribution_major_version }}"
 
   - name: Check if VM exists already
     virt:
@@ -40,7 +46,7 @@
       uri: qemu:///system
     register: guest_exists
     ignore_errors: true
-    become: yes
+    become: true
 
   - name: Ensure libvirt image directory is present
     file:
@@ -49,7 +55,7 @@
       mode: "0711"
       owner: root
       group: root
-    become: yes
+    become: true
     when: guest_exists is failed
 
   - name: create a remote temp directory
@@ -69,7 +75,7 @@
       mode: 0700
       owner: "{{ provision_user }}"
       group: "{{ provision_group }}"
-    become: yes
+    become: true
     when: guest_exists is failed
 
   delegate_to: "{{ hyper }}"
@@ -131,15 +137,27 @@
   template:
     src: virt-install-script.sh.j2
     dest: "{{runtime_tempdir}}/virt-install-script.sh.j2"
-  become: yes
+  become: true
   delegate_to: "{{ hyper }}"
   when: guest_exists is failed
+
+#The task below is for debugging purposes and can be removed when it is no longer needed.
+- name: Print the contents of the generated virt-install script
+  command: cat "{{ runtime_tempdir }}/virt-install-script.sh.j2"
+  register: script_contents
+  become: true
+  delegate_to: "{{ hyper }}"
+  when: guest_exists is failed
+
+- name: Show script contents for debugging
+  debug:
+    var: script_contents.stdout_lines
 
 - name: Start deployment of VM
   command: "bash {{runtime_tempdir}}/virt-install-script.sh.j2"
   args:
     creates: "/etc/libvirt/qemu/{{ inventory_hostname }}.xml"
-  become: yes
+  become: true
   environment: "{{ env_virt_install | default(omit) }}"
   delegate_to: "{{ hyper }}"
   register: virt_install_job
@@ -168,16 +186,16 @@
   # https://dmsimard.com/2016/01/08/selinux-python-virtualenv-chroot-and-ansible-dont-play-nice/
   # Since this is a hassle this task is set to ignore errors. Pull requests
   # are welcome! ;-)
-- name: Remove known_hosts entry for exact hostname or IP
-  shell: ssh-keygen -R "{{ item }}"
+- name: Clear known_hosts for new VM
+  known_hosts:
+    name: "{{ item }}"
+    state: absent
   when: guest_exists is failed
   delegate_to: localhost
   with_items:
     - "{{ ansible_host | default('') }}"
     - "{{ inventory_hostname }}"
-    - "{{ fqdn }}"
-  ignore_errors: yes
-
+  ignore_errors: true
 - name: Wait for ssh key configuration by cloud-init
   pause: seconds="{{ provisioning_wait_seconds|default(20) }}"
   when:
@@ -189,7 +207,7 @@
   file:
     path: "{{ runtime_tempdir }}"
     state: absent
-  become: yes
+  become: true
   delegate_to: "{{ hyper }}"
   when: guest_exists is failed and provision_cleanup_runtimedir
 ...
