@@ -5,4 +5,4 @@ internal_interface: enp1s0
 debug: true
 network_address: "192.168.1.53"
 networks:
-  - "network --onboot=on --device={{ internal_interface }} --bootproto=static --ip={{ network_address }} --netmask={{ network_mask }} --gateway={{ network_gateway4 }} --nameserver={{ dns|join(',') }} --hostname={{ inventory_hostname }}"
+  - "network --onboot=on --device={{ internal_interface }} --bootproto=static --ip={{ network_address }} --netmask={{ network_mask }} --gateway={{ network_gateway4 }} --nameserver=8.8.8.8 --hostname={{ inventory_hostname }}"

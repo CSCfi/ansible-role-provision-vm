@@ -3,7 +3,7 @@ install_url: https://www.nic.funet.fi/pub/mirrors/almalinux.org/9/BaseOS/x86_64/
 image_url_prefix: "https://www.nic.funet.fi/pub/mirrors/almalinux.org/9/cloud/x86_64/images/"
 image_name: "AlmaLinux-9-GenericCloud-latest.x86_64.qcow2"
 
-root_disk_size: 8
+root_disk_size: 
 
 disks:
   - { path: "/var/lib/libvirt/images/{{ inventory_hostname }}.raw", size: "{{ root_disk_size }}" }

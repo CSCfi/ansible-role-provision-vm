@@ -92,7 +92,7 @@
       root_password: "{{ lookup('password', 'credentials/'+ inventory_hostname  +'_rootpw length=15 chars=ascii_letters,digits,hexdigits,.,_,,') }}"
       dns:
         - 8.8.8.8
-        - 1.1.1.1
+#        - 1.1.1.1
       network_mask: "255.255.255.0"
       network_prefix: "/24"
       network_gateway4: "192.168.1.1"
