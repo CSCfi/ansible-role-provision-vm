@@ -1,4 +1,5 @@
 guest_type: image
+root_disk_size: 10
 vcpus: 2
 ram: 2048
 internal_interface: eth0
