@@ -29,7 +29,12 @@ before_script:
   # Build the image with cgroups v2 support
   - docker build -t ${REPO}:${IMAGE_BUILD_PLATFORM} ${TESTDIR}/${IMAGE_BUILD_PLATFORM}/
   # Launch the container with systemd and cgroups v2 enabled
-  - docker run --privileged --cgroupns=host -d -ti -e "container=docker" -v `pwd`:/$ROLETOTEST -v /sys/fs/cgroup:/sys/fs/cgroup:rw ${REPO}:${IMAGE_BUILD_PLATFORM} /usr/sbin/init
+  - docker run --privileged --cgroupns=host -d -ti 
+    -e "container=docker" 
+    -v `pwd`:/$ROLETOTEST 
+    -v /sys/fs/cgroup:/sys/fs/cgroup:rw 
+    -v /var/tmp/vm-disks:/var/lib/libvirt/images 
+    ${REPO}:${IMAGE_BUILD_PLATFORM} /usr/sbin/init
   - DOCKER_CONTAINER_ID=$(docker ps | grep ${IMAGE_BUILD_PLATFORM} | awk '{print $1}')
   - docker logs $DOCKER_CONTAINER_ID
 script:
