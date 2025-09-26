@@ -86,6 +86,7 @@
     remote_user: root
     vars:
       hyper: "localhost"
+      debug_role: true
       install_timeout: 0
       provision_cleanup_runtimedir: False
       root_password: "{{ lookup('password', 'credentials/'+ inventory_hostname  +'_rootpw length=15 chars=ascii_letters,digits,hexdigits,.,_,,') }}"

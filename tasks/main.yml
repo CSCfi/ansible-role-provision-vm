@@ -169,6 +169,13 @@
   set_fact: ansible_host={{ internal_ip }}
   when: set_ansible_host_to_internal_ip == true
 
+- name: Attach to VM console for debugging (300s)
+  command: virsh console {{ inventory_hostname }}
+  async: 300
+  poll: 10
+  ignore_errors: true
+  when: debug_role | default(false)
+
 - name: wait for VM to become available before continuing
   wait_for:
     port: 22
