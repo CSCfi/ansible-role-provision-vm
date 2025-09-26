@@ -23,7 +23,6 @@ virt-install \
 {% set default_args = default_args + "inst.ks=file:/%s.ks" % inventory_hostname %}
 {% set custom_args = provision_virt_install_extra_settings | join(' ') if provision_virt_install_extra_settings is defined else "" %}
   --extra-args="{{ default_args }} {{ custom_args }}" \
-{% endif %}
   --cpu=host-model \
 {% for device in (vm_pci_passthrough_devices | default([])) %}
   --host-device={{ device }} \
@@ -32,6 +31,7 @@ virt-install \
   --wait={{ install_timeout }} \
   --location={{ install_url }} \
   --initrd-inject={{ runtime_tempdir }}/{{ inventory_hostname }}.ks \
+{% endif %}
 {% if os_variant is defined %}
   --os-variant={{ os_variant }} \
 {% endif %}
