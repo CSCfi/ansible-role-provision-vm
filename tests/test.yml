@@ -4,6 +4,16 @@
     hosts: localhost
     remote_user: root
     vars:
+      install_extra_packages:
+        - bridge-utils
+        - libvirt
+        - NetworkManager
+        - openssh-server
+        - python3-libvirt
+        - qemu-kvm
+        - qemu-img
+        - virt-install
+        - virt-top
       ansible_python_interpreter: /usr/libexec/platform-python
 
     pre_tasks:
@@ -18,6 +28,57 @@
           }}
         when: ansible_distribution_major_version == '8' or ansible_distribution_major_version == '9'
 
+      - name: Clear all previously gathered facts
+        meta: clear_facts
+      - name: Install requirement packages for the hypervisor
+        package:
+          name: "{{ item }}"
+          state: present
+        when: install_extra_packages is defined
+        loop: "{{ install_extra_packages }}"
+
+      - name: Create directory for libvirt
+        file:
+          path: "/etc/libvirt/qemu/"
+          state: directory
+          recurse: yes
+
+      - file:
+          path: "/etc/libvirt/qemu/{{ inventory_hostname }}.xml"
+          state: touch
+
+      - name: Start services
+        service:
+          name: "{{ item }}"
+          state: started
+          enabled: yes
+        with_items:
+          - "sshd"
+          - "libvirtd"
+          - "NetworkManager"
+
+      - name: Create network bridge br-example
+        command: >
+          nmcli connection add type bridge 
+          con-name br-example 
+          ifname br-example
+          ipv4.method manual
+          ipv4.addresses 192.168.1.10/24
+          ipv4.gateway 192.168.1.1
+          ipv4.dns 8.8.8.8
+          autoconnect yes
+
+      - name: Add physical interface to the bridge
+        command: > 
+          nmcli connection add type bridge-slave
+          con-name br-example-slave
+          ifname eth0
+          master br-example
+          autoconnect yes
+        
+      - name: Start the new bridge
+        command: "nmcli con up br-example"
+
 -   name: Playbook for CI testing.
     hosts: provision_vm
     serial: 1
@@ -25,6 +86,9 @@
     remote_user: root
     vars:
       hyper: "localhost"
+#      install_timeout: -1
+      provision_cleanup_runtimedir: False
+      root_password: "{{ lookup('password', 'credentials/'+ inventory_hostname  +'_rootpw length=15 chars=ascii_letters,digits,hexdigits,.,_,,') }}"
       dns:
         - 8.8.8.8
         - 1.1.1.1
@@ -33,6 +97,13 @@
       network_gateway4: "192.168.1.1"
       internal_ip: "{{ network_address }}"
       ansible_python_interpreter: /usr/libexec/platform-python
+    pre_tasks:
+    - name: Set bridges variable if br-example exists
+      set_fact:
+        bridges:
+          - br-example
+      when: "'br-example' in ansible_facts['interfaces']" #inside the hypervisor
+      delegate_to: hypervisor
     roles:
       - ansible-role-provision-vm
 ...
