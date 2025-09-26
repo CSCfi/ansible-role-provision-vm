@@ -4,6 +4,7 @@ virt-install \
   --ram {{ ram }} \
   --connect=qemu:///system \
   --autostart \
+  --noautoconsole \
 {% if guest_type is defined and guest_type == "image" %}
   --import \
   --disk {{ image_path}}/{{ inventory_hostname }}.iso,device=cdrom \
@@ -28,13 +29,13 @@ virt-install \
   --host-device={{ device }} \
 {% endfor %}
   {{ kickstart_graphics | default('--nographics') }} \
-  --wait={{ install_timeout }} \
   --location={{ install_url }} \
   --initrd-inject={{ runtime_tempdir }}/{{ inventory_hostname }}.ks \
 {% endif %}
 {% if os_variant is defined %}
   --os-variant={{ os_variant }} \
 {% endif %}
+  --wait={{ install_timeout }} \
 {% for disk in disks %}
   --disk path={{ disk.path }},cache=writethrough,discard=unmap,device=disk,bus=virtio,size={{ disk.size }},format={{ disk.format | default('raw') }}
 {% endfor %}
