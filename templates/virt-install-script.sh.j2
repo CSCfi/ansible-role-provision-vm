@@ -4,6 +4,7 @@ virt-install \
   --ram {{ ram }} \
   --connect=qemu:///system \
   --autostart \
+  --noautoconsole \
 {% if guest_type is defined and guest_type == "image" %}
   --import \
   --disk {{ image_path}}/{{ inventory_hostname }}.iso,device=cdrom \
