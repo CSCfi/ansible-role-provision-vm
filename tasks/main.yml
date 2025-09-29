@@ -171,8 +171,8 @@
   set_fact: ansible_host={{ internal_ip }}
   when: set_ansible_host_to_internal_ip == true
 
-- name: Monitor the vm installation
-  command: timeout 600 virsh console {{ inventory_hostname }}
+- name: Tail VM console log
+  shell: "timeout 600 tail -n 100 -f /var/log/libvirt/qemu/{{ inventory_hostname }}.log"
   ignore_errors: true
   when: debug|bool
 
