@@ -176,3 +176,5 @@ adminusers: []
 
 # Package name for Puppet agent
 puppet_agent_package: puppet
+
+virt_type: kvm

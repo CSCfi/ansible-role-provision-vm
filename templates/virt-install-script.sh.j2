@@ -32,10 +32,10 @@ virt-install \
 {% endif %}
   --wait={{ install_timeout }} \
 {% for disk in disks %}
-  --disk path={{ disk.path }},cache=writethrough,discard=unmap,device=disk,bus=virtio,size={{ disk.size }},format={{ disk.format | default('raw') }}
+  --disk path={{ disk.path }},cache=writethrough,discard=unmap,device=disk,bus=virtio,size={{ disk.size }},format={{ disk.format | default('raw') }} \
 {% endfor %}
 {% if guest_type is defined and guest_type == "image" %}
   --import \
   --disk {{ image_path}}/{{ inventory_hostname }}.iso,device=cdrom \
-  --virt-type kvm \
 {% endif %}
+  --virt-type {{ virt_type }}
