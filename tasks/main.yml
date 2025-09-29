@@ -147,11 +147,12 @@
   register: script_contents
   become: true
   delegate_to: "{{ hyper }}"
-  when: guest_exists is failed
+  when: guest_exists is failed and debug | bool
 
 - name: Show script contents for debugging
   debug:
     var: script_contents.stdout_lines
+  when: debug | bool
 
 - name: Start deployment of VM
   command: "bash {{runtime_tempdir}}/virt-install-script.sh.j2"
@@ -168,6 +169,11 @@
 - name: Set ansible_host to the new guest IP address
   set_fact: ansible_host={{ internal_ip }}
   when: set_ansible_host_to_internal_ip == true
+
+- name: Monitor the vm installation
+  command: timeout 600 virsh console {{ inventory_hostname }}
+  ignore_errors: true
+  when: debug | bool
 
 - name: wait for VM to become available before continuing
   wait_for:
