@@ -1,4 +1,5 @@
 guest_type: image
+install_timeout: 2
 root_disk_size: 10
 vcpus: 2
 ram: 3072

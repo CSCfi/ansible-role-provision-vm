@@ -15,17 +15,6 @@
       state: present
     become: true
 
-  # Fetch a ready made OpenStack image.
-  # Read only, and owned by the qemu user.
-  - name: Download specified image
-    get_url:
-      url: "{{ image_url_prefix }}/{{ image_name }}"
-      dest: "{{ image_path}}/{{ image_name }}"
-      mode: 0400
-      owner: "{{ provision_user }}"
-      backup: yes
-    become: true
-
   - name: Generate cloud-init meta-data
     template:
       src: "{{ item }}.j2"
@@ -81,6 +70,17 @@
       mode: 0400
       owner: "{{ provision_user }}"
       group: "{{ provision_group }}"
+    become: true
+
+  # Fetch a ready made OpenStack image.
+  # Read only, and owned by the qemu user.
+  - name: Download specified image
+    get_url:
+      url: "{{ image_url_prefix }}/{{ image_name }}"
+      dest: "{{ image_path}}/{{ image_name }}"
+      mode: 0400
+      owner: "{{ provision_user }}"
+      backup: yes
     become: true
 
   - name: Copy the image for this guest
