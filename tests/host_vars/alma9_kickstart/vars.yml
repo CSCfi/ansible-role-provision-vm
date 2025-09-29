@@ -1,5 +1,5 @@
 vcpus: 2
-install_timeout: 10
+install_timeout: -1
 root_disk_size: 10
 ram: 3072
 internal_interface: enp1s0
