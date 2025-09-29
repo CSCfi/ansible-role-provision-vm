@@ -13,9 +13,11 @@
   register: ks_file
   become: true
   delegate_to: "{{ hyper }}"
+  when: debug|bool
 
 - name: Show .ks file contents for debugging
   debug:
     var: ks_file.stdout_lines
+  when: debug|bool
 
 ...

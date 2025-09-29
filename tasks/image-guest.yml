@@ -8,6 +8,7 @@
     debug:
       var: ethernets
       verbosity: 1
+    when: debug|bool
 
   - name: Ensure guestfish is installed
     package:
@@ -38,6 +39,7 @@
     register: cloud_init_files
     become: true
     changed_when: false
+    when: debug|bool
 
   - name: Generate ISO for cloud-init
     command: genisoimage -output {{ runtime_tempdir }}/cloud-init.iso -volid \
@@ -97,6 +99,7 @@
   - name: Check the image size
     command: "qemu-img info {{ image_path}}/{{ inventory_hostname }}.qcow2"
     become: true
+    when: debug|bool
 
 
   - name: Resize image to use whole disk
