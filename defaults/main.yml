@@ -181,3 +181,6 @@ adminusers: []
 puppet_agent_package: puppet
 
 virt_type: kvm
+
+#Enable debugging tasks
+debug: false
