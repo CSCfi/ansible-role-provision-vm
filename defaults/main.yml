@@ -6,6 +6,9 @@
 # Time to wait for install to finish (in minutes)
 install_timeout: "30"
 
+# Time to wait for post installation SSH test to time out (in seconds)
+ssh_timeout: "600"
+
 # Provision linux user on each hypervisor
 provision_user: qemu
 provision_group: qemu

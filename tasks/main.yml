@@ -173,7 +173,7 @@
   wait_for:
     port: 22
     host: "{{ provisioning_wait_for_addr | default(ansible_host) }}"
-    timeout: 300
+    timeout: "{{ ssh_timeout }}"
     search_regex: OpenSSH
   delegate_to: "{{ bastion_host | default(hyper) }}"
   when: guest_exists is failed
