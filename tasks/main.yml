@@ -175,7 +175,7 @@
 
 - name: Check if VM console log exists
   wait_for:
-    path: "/var/log/libvirt/qemu/{{ inventory_hostname }}.log"
+    path: "/var/log/libvirt/qemu/{{ inventory_hostname }}-serial.log"
     timeout: 120
   delegate_to: "{{ hyper }}"
   when: debug|bool
@@ -186,7 +186,7 @@
   when: debug|bool
 
 - name: Show VM console log
-  command: cat /var/log/libvirt/qemu/{{ inventory_hostname }}.log
+  command: cat /var/log/libvirt/qemu/{{ inventory_hostname }}-serial.log
   register: vm_log
   changed_when: false
   when: debug|bool

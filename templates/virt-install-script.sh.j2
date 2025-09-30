@@ -19,6 +19,7 @@ virt-install \
 {% set default_args = default_args + "inst.ks=file:/%s.ks" % inventory_hostname %}
 {% set custom_args = provision_virt_install_extra_settings | join(' ') if provision_virt_install_extra_settings is defined else "" %}
   --extra-args="{{ default_args }} {{ custom_args }}" \
+  --serial file,path=/var/log/libvirt/qemu/{{ inventory_hostname }}-serial.log \
   --cpu=host-model \
 {% for device in (vm_pci_passthrough_devices | default([])) %}
   --host-device={{ device }} \
