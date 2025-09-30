@@ -57,6 +57,9 @@
           - "libvirtd"
           - "NetworkManager"
 
+      - name: Show the network connections
+        command: "nmcli con show"
+
       - name: Check the network connections
         command: nmcli -t -f NAME connection show
         register: nmcli_connections
@@ -78,7 +81,7 @@
         command: > 
           nmcli connection add type bridge-slave
           con-name br-example-slave
-          ifname eth0
+          ifname ens3
           master br-example
           autoconnect yes
         when: "'br-example-slave' not in nmcli_connections.stdout_lines"
