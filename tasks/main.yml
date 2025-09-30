@@ -180,12 +180,20 @@
   delegate_to: "{{ hyper }}"
   when: debug|bool
 
-- name: Tail VM console log
-  shell: "timeout 600 tail -n 100 -f /var/log/libvirt/qemu/{{ inventory_hostname }}.log"
-  async: 600
-  poll: 30
-  ignore_errors: true
-  delegate_to: "{{ hyper }}"
+- name: Wait 5 minutes before showing VM log
+  wait_for:
+    timeout: 300
+  when: debug|bool
+
+- name: Show VM console log
+  command: cat /var/log/libvirt/qemu/{{ inventory_hostname }}.log
+  register: vm_log
+  changed_when: false
+  when: debug|bool
+
+- name: Print VM console log
+  debug:
+    msg: "{{ vm_log.stdout }}"
   when: debug|bool
 
 - name: wait for VM to become available before continuing
