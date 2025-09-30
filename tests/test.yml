@@ -57,6 +57,11 @@
           - "libvirtd"
           - "NetworkManager"
 
+      - name: Check the network connections
+        command: nmcli -t -f NAME connection show
+        register: nmcli_connections
+        changed_when: false
+
       - name: Create network bridge br-example
         command: >
           nmcli connection add type bridge 
@@ -67,6 +72,7 @@
           ipv4.gateway 192.168.1.1
           ipv4.dns 8.8.8.8
           autoconnect yes
+        when: "'br-example' not in nmcli_connections.stdout_lines"
 
       - name: Add physical interface to the bridge
         command: > 
@@ -75,6 +81,7 @@
           ifname eth0
           master br-example
           autoconnect yes
+        when: "'br-example-slave' not in nmcli_connections.stdout_lines"
         
       - name: Start the new bridge
         command: "nmcli con up br-example"
