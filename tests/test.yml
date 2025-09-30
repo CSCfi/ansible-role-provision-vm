@@ -79,6 +79,9 @@
       - name: Start the new bridge
         command: "nmcli con up br-example"
 
+      - name: Show the network connections
+        command: "nmcli con show"
+
 -   name: Playbook for CI testing.
     hosts: provision_vm
     serial: 1

@@ -5,6 +5,13 @@ virt-install \
   --connect=qemu:///system \
   --autostart \
   --noautoconsole \
+{% for disk in disks %}
+  --disk path={{ disk.path }},cache=writethrough,discard=unmap,device=disk,bus=virtio,size={{ disk.size }},format={{ disk.format | default('raw') }} \
+{% endfor %}
+{% if guest_type is defined and guest_type == "image" %}
+  --import \
+  --disk {{ image_path}}/{{ inventory_hostname }}.iso,device=cdrom \
+{% endif %}
 {% for bridge in bridges %}
 {% set bridge_config = "model=virtio" %}
 {% if virtio_multiqueue is defined %}
@@ -16,6 +23,8 @@ virt-install \
 {% endfor %}
 {% set default_args = "console=ttyS0,115200n8 serial inst.text plymouth.enable=0 " %}
 {% if guest_type is not defined or guest_type != "image" %}
+  --location={{ install_url }} \
+  --initrd-inject={{ runtime_tempdir }}/{{ inventory_hostname }}.ks \
 {% set default_args = default_args + "inst.ks=file:/%s.ks" % inventory_hostname %}
 {% set custom_args = provision_virt_install_extra_settings | join(' ') if provision_virt_install_extra_settings is defined else "" %}
   --extra-args="{{ default_args }} {{ custom_args }}" \
@@ -25,18 +34,9 @@ virt-install \
   --host-device={{ device }} \
 {% endfor %}
   {{ kickstart_graphics | default('--nographics') }} \
-  --location={{ install_url }} \
-  --initrd-inject={{ runtime_tempdir }}/{{ inventory_hostname }}.ks \
 {% endif %}
 {% if os_variant is defined %}
   --os-variant={{ os_variant }} \
 {% endif %}
   --wait={{ install_timeout }} \
-{% for disk in disks %}
-  --disk path={{ disk.path }},cache=writethrough,discard=unmap,device=disk,bus=virtio,size={{ disk.size }},format={{ disk.format | default('raw') }} \
-{% endfor %}
-{% if guest_type is defined and guest_type == "image" %}
-  --import \
-  --disk {{ image_path}}/{{ inventory_hostname }}.iso,device=cdrom \
-{% endif %}
   --virt-type {{ virt_type }}
