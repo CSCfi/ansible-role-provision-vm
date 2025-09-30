@@ -148,7 +148,9 @@
   register: script_contents
   become: true
   delegate_to: "{{ hyper }}"
-  when: guest_exists is failed and debug|bool
+  when: 
+    - guest_exists is failed
+    - debug|bool
 
 - name: Show script contents for debugging
   debug:
@@ -171,8 +173,17 @@
   set_fact: ansible_host={{ internal_ip }}
   when: set_ansible_host_to_internal_ip == true
 
+- name: Check if VM console log exists
+  wait_for:
+    path: "/var/log/libvirt/qemu/{{ inventory_hostname }}.log"
+    timeout: 120
+  delegate_to: "{{ hyper }}"
+  when: debug|bool
+
 - name: Tail VM console log
   shell: "timeout 600 tail -n 100 -f /var/log/libvirt/qemu/{{ inventory_hostname }}.log"
+  async: 600
+  poll: 30
   ignore_errors: true
   delegate_to: "{{ hyper }}"
   when: debug|bool
