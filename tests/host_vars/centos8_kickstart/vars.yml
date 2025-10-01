@@ -2,8 +2,8 @@ ram: 3072
 vcpus: 2
 install_timeout: 0
 root_disk_size: 10
-internal_interface: link
+#internal_interface: enp1s0
 network_address: "192.168.1.51"
 debug: true
 networks:
-  - "network --onboot=on --device={{ internal_interface }} --bootproto=static --ip={{ network_address }} --netmask={{ network_mask }} --gateway={{ network_gateway4 }} --nameserver=8.8.8.8 --hostname={{ inventory_hostname }}"
+  - "network --onboot=on --bootproto=static --ip={{ network_address }} --netmask={{ network_mask }} --gateway={{ network_gateway4 }} --nameserver=8.8.8.8 --hostname={{ inventory_hostname }}"
