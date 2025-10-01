@@ -2,7 +2,7 @@ ram: 3072
 vcpus: 2
 install_timeout: 0
 root_disk_size: 10
-internal_interface: enp1s0
+internal_interface: link
 network_address: "192.168.1.51"
 debug: true
 networks:
