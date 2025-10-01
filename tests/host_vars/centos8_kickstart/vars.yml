@@ -6,4 +6,16 @@ root_disk_size: 10
 network_address: "192.168.1.51"
 debug: true
 networks:
-  - "network --onboot=on --bootproto=static --ip={{ network_address }} --netmask={{ network_mask }} --gateway={{ network_gateway4 }} --nameserver=8.8.8.8 --hostname={{ inventory_hostname }}"
+  - "network --onboot=on --bootproto=dhcp"
+#  - "network --onboot=on --bootproto=static --ip={{ network_address }} --netmask={{ network_mask }} --gateway={{ network_gateway4 }} --nameserver=8.8.8.8 --hostname={{ inventory_hostname }}"
+
+provision_kickstart_extra_post_commands: |
+  cat > /etc/sysconfig/network-scripts/ifcfg-ens3 <<EOF
+  DEVICE=ens3
+  BOOTPROTO=static
+  IPADDR=192.168.1.51
+  NETMASK=255.255.255.0
+  GATEWAY=192.168.1.1
+  DNS1=8.8.8.8
+  ONBOOT=yes
+EOF
