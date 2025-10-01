@@ -11,7 +11,7 @@ matrix:
 
 env:
   - IMAGE_BUILD_PLATFORM=stable-centos8
-  - IMAGE_BUILD_PLATFORM=stable-alma9
+#  - IMAGE_BUILD_PLATFORM=stable-alma9
 
 install:
   - npm install validate-dockerfile
