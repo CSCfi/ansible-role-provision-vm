@@ -4,7 +4,7 @@ install_timeout: 0
 root_disk_size: 10
 #internal_interface: enp1s0
 network_address: "192.168.1.51"
-mac_address: 52:54:00:12:34:56
+mac_address: "52:54:00:12:34:56"
 debug: true
 networks:
 #  - "network --onboot=on --bootproto=dhcp"
