@@ -86,8 +86,8 @@
           autoconnect yes
         when: "'br-example-slave' not in nmcli_connections.stdout_lines"
         
-      - name: Start the new bridge
-        command: "nmcli con up br-example"
+      - name: Restart NetworkManager
+        command: "systemctl restart NetworkManager"
 
       - name: Show the network connections
         command: "nmcli con show"
@@ -110,6 +110,9 @@
       network_gateway4: "192.168.1.1"
       internal_ip: "{{ network_address }}"
       ansible_python_interpreter: /usr/libexec/platform-python
+#      provision_virt_install_extra_settings:
+#        - "ip=[{{ internal_ip }}]::[{{ network_gateway4 }}]:{{ network_prefix|replace('/','') }}:{{ inventory_hostname }}:{{ internal_interface }}:none nameserver=[8.8.8.8]"
+
     pre_tasks:
     - name: Set bridges variable if br-example exists
       set_fact:
