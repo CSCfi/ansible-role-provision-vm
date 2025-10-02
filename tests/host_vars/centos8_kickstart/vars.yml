@@ -8,4 +8,4 @@ network_address: "192.168.1.51"
 debug: true
 networks:
 #  - "network --onboot=on --bootproto=dhcp"
-  - "network --onboot=on --bootproto=static --ip={{ network_address }} --netmask={{ network_mask }} --gateway={{ network_gateway4 }}"
+  - "network --onboot=on --bootproto=static --ip={{ network_address }} --netmask={{ network_mask }} --gateway={{ network_gateway4 }} --nameserver=8.8.8.8 --hostname={{ inventory_hostname }}"
