@@ -110,7 +110,8 @@
       network_gateway4: "192.168.1.1"
       internal_ip: "{{ network_address }}"
       ansible_python_interpreter: /usr/libexec/platform-python
-#      provision_virt_install_extra_settings:
+      provision_virt_install_extra_settings:
+        - "inst.debug loglevel=debug "
 #        - "ip=[{{ internal_ip }}]::[{{ network_gateway4 }}]:{{ network_prefix|replace('/','') }}:{{ inventory_hostname }}:{{ internal_interface }}:none nameserver=[8.8.8.8]"
 
     pre_tasks:

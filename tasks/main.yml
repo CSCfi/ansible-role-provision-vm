@@ -182,7 +182,7 @@
 
 - name: Wait 5 minutes before showing VM log
   wait_for:
-    timeout: 300
+    timeout: 600
   when: debug|bool
 
 - name: Show VM console log
