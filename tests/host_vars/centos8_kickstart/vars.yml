@@ -7,5 +7,5 @@ network_address: "192.168.1.51"
 #mac_address: "52:54:00:12:34:56"
 debug: true
 networks:
-#  - "network --onboot=on --bootproto=dhcp"
-  - "network --onboot=on --bootproto=static --ip={{ network_address }} --netmask={{ network_mask }} --gateway={{ network_gateway4 }} --nameserver=8.8.8.8 --hostname={{ inventory_hostname }}"
+  - "network --bootproto=dhcp --device=link "
+#  - "network --onboot=on --bootproto=static --ip={{ network_address }} --netmask={{ network_mask }} --gateway={{ network_gateway4 }} --nameserver=8.8.8.8 --hostname={{ inventory_hostname }}" --activate
