@@ -65,7 +65,7 @@
         register: nmcli_connections
         changed_when: false
 
-      - name: Create network bridge br-example
+      - name: Ensure bridge br-example exists
         command: >
           nmcli connection add type bridge
           con-name br-example
@@ -73,21 +73,65 @@
           ipv4.method manual
           ipv4.addresses 192.168.1.10/24
           ipv4.gateway 192.168.1.1
-          ipv4.dns 8.8.8.8
+          ipv4.dns "8.8.8.8 1.1.1.1"
+          ipv6.method ignore
           autoconnect yes
+        args:
+          creates: /etc/NetworkManager/system-connections/br-example.nmconnection
         when: "'br-example' not in nmcli_connections.stdout_lines"
 
-      - name: Add physical interface to the bridge
-        command: > 
-          nmcli connection add type bridge-slave
+      - name: Add physical NIC ens3 as bridge slave
+        command: >
+          nmcli connection add type ethernet
           con-name br-example-slave
           ifname ens3
           master br-example
           autoconnect yes
+        args:
+          creates: /etc/NetworkManager/system-connections/br-example-slave.nmconnection
         when: "'br-example-slave' not in nmcli_connections.stdout_lines"
+
+      - name: Bring up bridge
+        command: nmcli connection up br-example
+
+      - name: Bring up bridge slave
+        command: nmcli connection up br-example-slave
+
+      - name: Assign bridge to firewalld zone
+        firewalld:
+          zone: public
+          interface: br-example
+          permanent: true
+          state: enabled
+
+      - name: Reload firewalld
+        command: firewall-cmd --reload
+
+      # - name: Create network bridge br-example
+      #   command: >
+      #     nmcli connection add type bridge
+      #     con-name br-example
+      #     ifname br-example
+      #     ipv4.method manual
+      #     ipv4.addresses 192.168.1.10/24
+      #     ipv4.gateway 192.168.1.1
+      #     ipv4.dns 8.8.8.8
+      #     autoconnect yes
+      #   when: "'br-example' not in nmcli_connections.stdout_lines"
+
+      # - name: Add physical interface to the bridge
+      #   command: > 
+      #     nmcli connection add type bridge-slave
+      #     con-name br-example-slave
+      #     ifname ens3
+      #     master br-example
+      #     autoconnect yes
+      #   when: "'br-example-slave' not in nmcli_connections.stdout_lines"
         
-      - name: Restart NetworkManager
-        command: "systemctl restart NetworkManager"
+      # - name: Restart NetworkManager
+      #   command: "systemctl restart NetworkManager"
+
+
 
       - name: Show the network connections
         command: "nmcli con show"
