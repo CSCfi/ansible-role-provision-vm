@@ -11,4 +11,4 @@ networks:
   - "network --onboot=on --bootproto=static --ip={{ network_address }} --netmask={{ network_mask }} --gateway={{ network_gateway4 }} --nameserver=8.8.8.8 --hostname={{ inventory_hostname }} --activate"
 
 provision_virt_install_extra_settings:
-  - "inst.loglevel=debug ip=192.168.1.51::192.168.1.1:255.255.255.0:centos8_kickstart:enp1s0:none nameserver=8.8.8.8"
+  - "ipv6.disable=1 inst.loglevel=debug ip=192.168.1.51::192.168.1.1:255.255.255.0:centos8_kickstart:enp1s0:none nameserver=8.8.8.8"
