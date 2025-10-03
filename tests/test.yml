@@ -85,7 +85,7 @@
 
       - name: Add physical NIC ens3 as bridge slave
         command: >
-          nmcli connection add type ethernet
+          nmcli connection modify type ethernet
           con-name ens3
           ifname ens3
           master br-example
