@@ -83,19 +83,19 @@
       - name: Add physical NIC ens3 as bridge slave
         command: >
           nmcli connection add type ethernet
-          con-name br-example-slave
+          con-name ens3
           ifname ens3
           master br-example
           autoconnect yes
         args:
-          creates: /etc/NetworkManager/system-connections/br-example-slave.nmconnection
+          creates: /etc/NetworkManager/system-connections/ens3.nmconnection
         when: "'br-example-slave' not in nmcli_connections.stdout_lines"
 
       - name: Bring up bridge
         command: nmcli connection up br-example
 
       - name: Bring up bridge slave
-        command: nmcli connection up br-example-slave
+        command: nmcli connection reload ens3
 
       - name: Assign bridge to firewalld zone
         firewalld:
