@@ -1,10 +1,12 @@
 ---
 # Create a new guest using Kickstart
 
-- name: copy over kickstart file
+- name: Copy over kickstart file with ksvalidator
   template: 
-    src: "kickstart.cfg"
+    src: kickstart.cfg 
     dest: "{{ runtime_tempdir }}/{{ inventory_hostname }}.ks"
+    backup: yes
+    validate: '/usr/bin/ksvalidator %s'
   become: true
   delegate_to: "{{ hyper }}"
 
