@@ -67,8 +67,8 @@
 
       - name: Create network bridge br-example
         command: >
-          nmcli connection add type bridge 
-          con-name br-example 
+          nmcli connection add type bridge
+          con-name br-example
           ifname br-example
           ipv4.method manual
           ipv4.addresses 192.168.1.10/24
