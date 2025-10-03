@@ -1,5 +1,9 @@
 ---
 # Create a new guest using Kickstart
+- name: Install pykickstart for ksvalidator
+  dnf: 
+    name: pykickstart
+    state: present
 
 - name: Copy over kickstart file with ksvalidator
   template: 
