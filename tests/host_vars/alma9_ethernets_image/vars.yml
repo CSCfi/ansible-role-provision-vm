@@ -1,5 +1,6 @@
 guest_type: image
 internal_interface: eth0
+internal_ip: "{{ network_address }}"
 network_address: "192.168.122.52"
 ethernets:
 -   name: "{{ internal_interface }}"

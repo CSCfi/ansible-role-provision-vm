@@ -1,5 +1,6 @@
 guest_type: image
 internal_interface: eth0
+internal_ip: "{{ network_address }}"
 network_address: "192.168.122.50"
 cloud_init_networks:
 - interface: "{{ internal_interface }}"
