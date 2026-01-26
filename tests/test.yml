@@ -51,7 +51,7 @@
         service:
           name: "{{ item }}"
           state: started
-          enabled: yes
+          enabled: true
         loop:
           - sshd
 
@@ -85,7 +85,7 @@
 -   name: Playbook for CI testing.
     hosts: provision_vm
     serial: 1
-    gather_facts: yes
+    gather_facts: true
     remote_user: root
     vars:
       hyper: "localhost"

@@ -50,7 +50,7 @@ environment: default-environment
 #bastion_host:
 
 # When provisioning, set ansible_host value to the host's internal IP address
-set_ansible_host_to_internal_ip: Yes
+set_ansible_host_to_internal_ip: true
 
 #################################################
 # Kickstart based deployment settings ###########
