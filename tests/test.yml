@@ -18,6 +18,70 @@
           }}
         when: ansible_distribution_major_version == '8' or ansible_distribution_major_version == '9'
 
+      - name: Kill any running libvirt daemons
+        shell: |
+          pkill -9 libvirtd || true
+          pkill -9 virtqemud || true
+          pkill -9 virtstoraged || true
+        changed_when: false
+
+      - name: Ensure runtime directories exist
+        file:
+          path: "{{ item }}"
+          state: directory
+        loop:
+          - /var/run/libvirt
+          - /var/lib/libvirt/images
+
+      - name: Start libvirt daemon (container-safe, monolithic)
+        command: libvirtd --daemon
+        args:
+          creates: /var/run/libvirt/libvirt-sock
+
+      - name: Wait for libvirt socket
+        wait_for:
+          path: /var/run/libvirt/libvirt-sock
+          timeout: 10
+
+      - name: Verify libvirt responds
+        command: virsh -c qemu:///system version
+        changed_when: false
+
+      - name: Start services
+        service:
+          name: "{{ item }}"
+          state: started
+          enabled: yes
+        loop:
+          - sshd
+
+      - shell: "ls -l /var/run/libvirt/"
+
+      - name: Wait for libvirt to accept connections
+        command: virsh -c qemu:///system list
+        register: virsh_ready
+        retries: 10
+        delay: 1
+        until: virsh_ready.rc == 0
+        changed_when: false
+
+      - name: Get existing libvirt networks
+        command: virsh -c qemu:///system net-list --all
+        register: virsh_networks
+        changed_when: false
+
+      - name: Define libvirt default network (if missing)
+        command: virsh  -c qemu:///system net-define /tmp/libvirt-default.xml
+        when: "'default' not in virsh_networks.stdout"
+
+      - name: Autostart libvirt default network
+        command: virsh  -c qemu:///system net-autostart default
+        when: "'default' in virsh_networks.stdout or virsh_networks is defined"
+
+      - name: Start libvirt default network
+        command: virsh  -c qemu:///system net-start default
+        when: "'active' not in virsh_networks.stdout"
+
 -   name: Playbook for CI testing.
     hosts: provision_vm
     serial: 1
