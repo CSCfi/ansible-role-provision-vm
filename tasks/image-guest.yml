@@ -105,15 +105,6 @@
     command: "qemu-img resize -f qcow2 {{ image_path}}/{{ inventory_hostname }}.qcow2 {{ root_disk_size }}G"
     become: true
 
-  # This fact is picked up by the virt-install-command.j2 template and
-  # configures the VMs root disk
-  - name: Set the disk fact
-    set_fact:
-      disks:
-        - path: "{{ image_path}}/{{ inventory_hostname }}.qcow2"
-          size: "{{ root_disk_size }}"
-          format: qcow2
-
   # End of block
   delegate_to: "{{ hyper }}"
 ...
