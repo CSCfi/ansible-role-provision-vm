@@ -6,6 +6,9 @@
 # Time to wait for install to finish (in minutes)
 install_timeout: "30"
 
+# Time to wait for post installation SSH test to time out (in seconds)
+ssh_timeout: "300"
+
 # Provision linux user on each hypervisor
 provision_user: qemu
 provision_group: qemu
@@ -24,6 +27,9 @@ image_path: "{{ libvirt_root }}/images"
 
 # Root disk size (GB)
 root_disk_size: 30
+
+# Root disk format
+root_disk_format: qcow2
 
 # Default to a single vcpu
 vcpus: 1
@@ -52,8 +58,11 @@ set_ansible_host_to_internal_ip: Yes
 
 # Disks
 disks:
-  - path: "{{ image_path }}/{{ inventory_hostname }}.raw"
-    size: "{{ root_disk_size }}"
+  - path: "{{ image_path }}/{{ inventory_hostname }}.{{ root_disk_format }}"
+
+kickstart_limit_to_primary_disk: false
+kickstart_primary_disk: vda
+kickstart_autopart: false
 
 # What packages to exclude in yum.conf at install time
 yum_exclude: ""
@@ -176,3 +185,8 @@ adminusers: []
 
 # Package name for Puppet agent
 puppet_agent_package: puppet
+
+virt_type: kvm
+
+#Enable debugging tasks
+debug: false
