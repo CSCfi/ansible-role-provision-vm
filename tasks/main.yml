@@ -1,4 +1,11 @@
 ---
+#The task below is for debugging purposes and can be removed when it is no longer needed.
+- name: Debug hyper variable
+  debug:
+    var: hyper
+    verbosity: 1
+  when: debug|bool
+    
 - name: Check hyper is defined
   assert:
     that: hyper is defined
@@ -135,6 +142,21 @@
   delegate_to: "{{ hyper }}"
   when: guest_exists is failed
 
+#The task below is for debugging purposes and can be removed when it is no longer needed.
+- name: Print the contents of the generated virt-install script
+  command: cat "{{ runtime_tempdir }}/virt-install-script.sh.j2"
+  register: script_contents
+  become: true
+  delegate_to: "{{ hyper }}"
+  when: 
+    - guest_exists is failed
+    - debug|bool
+
+- name: Show script contents for debugging
+  debug:
+    var: script_contents.stdout_lines
+  when: debug|bool
+
 - name: Start deployment of VM
   command: "bash {{runtime_tempdir}}/virt-install-script.sh.j2"
   args:
@@ -150,6 +172,31 @@
 - name: Set ansible_host to the new guest IP address
   set_fact: ansible_host={{ internal_ip }}
   when: set_ansible_host_to_internal_ip == true
+
+- name: Check if VM console log exists
+  wait_for:
+    path: "/var/log/libvirt/qemu/{{ inventory_hostname }}-serial.log"
+    timeout: 120
+  delegate_to: "{{ hyper }}"
+  when: 
+    - debug|bool
+    - guest_type is not defined or guest_type != "image"
+
+- name: Wait 5 minutes before showing VM log
+  wait_for:
+    timeout: 550
+  when: debug|bool
+
+- name: Show VM console log
+  command: cat /var/log/libvirt/qemu/{{ inventory_hostname }}-serial.log
+  register: vm_log
+  changed_when: false
+  when: debug|bool
+
+- name: Print VM console log
+  debug:
+    msg: "{{ vm_log.stdout }}"
+  when: debug|bool
 
 - name: wait for VM to become available before continuing
   wait_for:
