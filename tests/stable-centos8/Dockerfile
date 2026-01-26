@@ -6,6 +6,7 @@ RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* && \
     dnf -y install python39 epel-release && \
     dnf -y update libmodulemd && \
     dnf -y groupinstall "Development Tools" && \
+    dnf -y install python3-libselinux python3-libsemanage python3-policycoreutils && \
     dnf -y install python3-pyyaml python3-jinja2 python3-setuptools && \
     python3 -m pip install --upgrade pip && \
     pip3 -V && \
@@ -14,6 +15,8 @@ RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* && \
     dnf -y remove $(rpm -qa "*-devel") && \
     dnf -y autoremove && \
     dnf -y install bzip2 crontabs file findutils gem git gzip hg procps-ng svn sudo tar tree which unzip xz zip && \
-    pip3 install ansible==2.9.27
+    dnf -y install libvirt openssh-server python3-libvirt qemu-kvm qemu-img virt-install virt-top && \
+    pip3 install ansible==2.9.27 && \
+    dnf clean all
 
 CMD ["/bin/bash"]
