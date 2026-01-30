@@ -190,3 +190,6 @@ virt_type: kvm
 
 #Enable debugging tasks
 debug: false
+
+#Print vm console log
+print_vm_console_log: false

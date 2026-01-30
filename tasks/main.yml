@@ -179,24 +179,24 @@
     timeout: 120
   delegate_to: "{{ hyper }}"
   when: 
-    - debug|bool
+    - print_vm_console_log|bool
     - guest_type is not defined or guest_type != "image"
 
 - name: Wait 5 minutes before showing VM log
   wait_for:
     timeout: 550
-  when: debug|bool
+  when: print_vm_console_log|bool
 
 - name: Show VM console log
   command: cat /var/log/libvirt/qemu/{{ inventory_hostname }}-serial.log
   register: vm_log
   changed_when: false
-  when: debug|bool
+  when: print_vm_console_log|bool
 
 - name: Print VM console log
   debug:
     msg: "{{ vm_log.stdout }}"
-  when: debug|bool
+  when: print_vm_console_log|bool
 
 - name: wait for VM to become available before continuing
   wait_for:
