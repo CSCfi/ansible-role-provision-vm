@@ -65,7 +65,7 @@ kickstart_primary_disk: vda
 kickstart_autopart: false
 
 # What packages to exclude in yum.conf at install time
-yum_exclude: ""
+#yum_exclude: ""
 
 # The basic set of packages to install during provisioning
 base_packages: []
