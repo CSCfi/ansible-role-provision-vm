@@ -1,5 +1,5 @@
 internal_interface: enp1s0
-debug: false
+debug: true
 
 provision_virt_install_extra_settings:
   - "inst.loglevel=debug ip=dhcp"

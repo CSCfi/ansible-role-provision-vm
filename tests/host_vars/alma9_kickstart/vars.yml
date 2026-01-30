@@ -1,4 +1,4 @@
 internal_interface: enp1s0
-debug: false
+debug: true
 networks:
   - "network --bootproto=dhcp --device={{ internal_interface}} --device=link --onboot=on --activate --nameserver=8.8.8.8"
