@@ -12,7 +12,7 @@ virt-install \
   --import \
   --disk {{ image_path}}/{{ inventory_hostname }}.iso,device=cdrom \
 {% endif %}
-{% if ci_mode %}
+{% if ci_mode | default(false) %}
   --network=default,model=virtio \
 {% else %}
 {% if bridge is defined %}
