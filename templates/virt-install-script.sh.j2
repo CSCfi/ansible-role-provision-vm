@@ -15,7 +15,7 @@ virt-install \
 {% if ci_mode | default(false) %}
   --network=default,model=virtio \
 {% else %}
-{% if bridge is defined %}
+{% if bridges is defined %}
 {% for bridge in bridges %}
 {% set bridge_config = "bridge={{ bridge }},model=virtio" %}
 {% if virtio_multiqueue is defined %}
