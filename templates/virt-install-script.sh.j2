@@ -17,7 +17,7 @@ virt-install \
 {% else %}
 {% if bridges is defined %}
 {% for bridge in bridges %}
-{% set bridge_config = "bridge={{ bridge }},model=virtio" %}
+{% set bridge_config = "bridge=%s,model=virtio" % bridge %}
 {% if virtio_multiqueue is defined %}
 {% set bridge_config = bridge_config + ",driver_name=vhost,driver_queues=%s" % vcpus %}
 {% elif mac_address is defined %}
