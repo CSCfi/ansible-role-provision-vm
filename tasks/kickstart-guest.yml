@@ -1,8 +1,31 @@
 ---
 # Create a new guest using Kickstart
+- name: Install pykickstart for ksvalidator
+  dnf: 
+    name: pykickstart
+    state: present
+  become: true
+  delegate_to: "{{ hyper }}"  
 
-- name: copy over kickstart file
-  template: src="kickstart.cfg" dest="{{ runtime_tempdir }}/{{ inventory_hostname }}.ks"
-  become: yes
+- name: Copy over kickstart file with ksvalidator
+  template: 
+    src: kickstart.cfg 
+    dest: "{{ runtime_tempdir }}/{{ inventory_hostname }}.ks"
+    backup: true
+    validate: '/usr/bin/ksvalidator %s'
+  become: true
   delegate_to: "{{ hyper }}"
+
+- name: Show .ks file contents for debugging
+  command: cat "{{ runtime_tempdir }}/{{ inventory_hostname }}.ks"
+  register: ks_file
+  become: true
+  delegate_to: "{{ hyper }}"
+  when: debug|bool
+
+- name: Show .ks file contents for debugging
+  debug:
+    var: ks_file.stdout_lines
+  when: debug|bool
+
 ...
